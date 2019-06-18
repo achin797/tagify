@@ -8,6 +8,21 @@ body {
   margin: 0;
 }
 
+#navbar {
+  height: 100%;
+
+  & > aside {
+    height: 100%;
+
+    & .logo {
+      background-color: rgba(255, 255, 255, 0.2);
+      margin: 10px 10px 6px;
+      width: 180px;
+      height: 32px;
+    }
+  }
+}
+
 #auth-page-sign-in {
   text-align: center;
 
@@ -86,6 +101,14 @@ body {
         }
       }
     }
+  }
+}
+
+#home-page {
+  height: 100vh;
+
+  & > section {
+    height: inherit;
   }
 }
 

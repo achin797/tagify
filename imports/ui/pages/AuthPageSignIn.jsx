@@ -3,6 +3,7 @@ import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Typography from 'antd/lib/typography';
 import Button from 'antd/lib/button';
+import AccountsUIWrapperLogin from '../AccountsUIWrapperLogin.js';
 
 const { Title, Paragraph } = Typography;
 
@@ -16,13 +17,7 @@ const AuthPageSignIn = () => (
       <div>
         <Title>Tags for everyone.</Title>
         <Title level={4}>Millions of songs. No playlists needed.</Title>
-        <Button
-          shape="round"
-          size="large"
-          type="primary"
-        >
-          Log in with Spotify
-        </Button>
+          <AccountsUIWrapperLogin />
       </div>
       <Button
         type="link"

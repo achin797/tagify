@@ -3,7 +3,6 @@ import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Typography from 'antd/lib/typography';
 import Button from 'antd/lib/button';
-import AccountsUIWrapperLogin from '../AccountsUIWrapperLogin.js';
 
 const { Title, Paragraph } = Typography;
 
@@ -11,13 +10,33 @@ const scrollToExplanation = () => {
   document.getElementById('auth-page-sign-in-explanation').scrollIntoView();
 };
 
-const AuthPageSignIn = () => (
+const AuthPageSignIn = (props) => (
   <div id="auth-page-sign-in">
     <div>
       <div>
         <Title>Tags for everyone.</Title>
         <Title level={4}>Millions of songs. No playlists needed.</Title>
-          <AccountsUIWrapperLogin />
+          <Button
+              shape="round"
+              size="large"
+              type="primary"
+              onClick={() => {
+                  let options = {
+                      showDialog: true, // Whether or not to force the user to approve the app again if they’ve already done so.
+                      requestPermissions: ['user-read-email'] // Spotify access scopes.
+                  };
+                  Meteor.loginWithSpotify(options, function (err) {
+                      if(err){
+                          console.log(err);
+                      }
+                      else{
+                          props.history.push("/home");
+                      }
+                  });
+              }}
+          >
+              Log in with Spotify
+          </Button>
       </div>
       <Button
         type="link"

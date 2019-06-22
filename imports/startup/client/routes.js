@@ -7,6 +7,8 @@ import HomePage from '../../ui/pages/HomePage';
 import TagsPage from '../../ui/pages/TagsPage';
 import NotFoundPage from '../../ui/pages/NotFoundPage';
 
+
+
 const browserHistory = createBrowserHistory();
 
 export const renderRoutes = () => (

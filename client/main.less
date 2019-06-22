@@ -125,3 +125,33 @@ body {
     transform: translate(-50%, -70%);
   }
 }
+
+
+#home-page {
+  text-align: center;
+  
+  & > div:nth-of-type(1) {
+    background-color: @secondary-color;
+    min-height: 10vh;
+    height: auto;
+  }
+
+  & > div:nth-of-type(2){
+    background-color: @primary-color;
+    min-height: 100vh;
+    height: auto;
+
+    -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 2s; /* Firefox < 16 */
+        -ms-animation: fadein 2s; /* Internet Explorer */
+         -o-animation: fadein 2s; /* Opera < 12.1 */
+            animation: fadein 2s;
+
+  }
+ 
+}
+
+ #tags_panel{
+    color: blue;
+    
+  }

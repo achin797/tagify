@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import reducers from '/imports/ui/reducers';
+
 import { renderRoutes } from '../imports/startup/client/routes';
 
 Meteor.startup(() => {

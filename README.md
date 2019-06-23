@@ -1,6 +1,6 @@
 # Tagify
 
-Group: Austin Kvaale n0a2b, Mingyu Gao f5k0b, Achintya Chandwani
+Group: Austin Kvaale n0a2b, Mingyu Gao f5k0b, Achintya Chandwani g9i0b
 
 ### Who is it for?
 Tagify is for Spotify users who find that playlists are too messy and take too many clicks.

@@ -19,7 +19,7 @@ const Navbar = ({ location }) => {
 
   return (
     <div id="navbar">
-      <Sider theme="dark">
+      <Sider>
         <div className="logo" />
         <Menu theme="dark" mode="inline" selectedKeys={selectedKey}>
           <Menu.Item key="0">

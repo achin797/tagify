@@ -12,21 +12,28 @@ export const deleteTag = tagId => {
   };
 };
 
-export const openModalCreateTag = () => {
+export const tagsPanelShowInput = () => {
   return {
-    type: 'OPEN_MODAL_CREATE_TAG'
+    type: 'TAGS_PANEL_SHOW_INPUT'
   };
 };
 
-export const closeModalCreateTag = () => {
+export const tagsPanelHideInput = () => {
   return {
-    type: 'CLOSE_MODAL_CREATE_TAG'
+    type: 'TAGS_PANEL_HIDE_INPUT'
   };
 };
 
-export const modalCreateTagOnChangeDisplayName = displayName => {
+export const onChangeDisplayName = displayName => {
   return {
-    type: 'MODAL_CREATE_TAG_ON_CHANGE_DISPLAY_NAME',
+    type: 'ON_CHANGE_DISPLAY_NAME',
     payload: displayName
+  };
+};
+
+export const toggleCheckTag = tagId => {
+  return {
+    type: 'TOGGLE_CHECK_TAG',
+    payload: tagId
   };
 };

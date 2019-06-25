@@ -12,13 +12,81 @@ body {
   height: 100%;
 
   & > aside {
+    background-color: @background-navbar;
     height: 100%;
 
-    & .logo {
-      background-color: rgba(255, 255, 255, 0.2);
-      margin: 10px 10px 6px;
-      width: 180px;
-      height: 32px;
+    & > div {
+      & > .logo {
+        background-color: rgba(255, 255, 255, 0.2);
+        margin: 10px 10px 6px;
+        width: 180px;
+        height: 32px;
+      }
+
+      & > ul {
+        background-color: @background-navbar;
+      }
+    }
+  }
+}
+
+#tags-panel {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0.5rem 0 1rem;
+
+  span {
+    margin-bottom: 0.5rem;
+  }
+
+  span > .ant-tag, span > input {
+    background-color: @background-dark;
+    color: white;
+    height: 2rem;
+    line-height: 2rem;
+    font-size: 1rem;
+  }
+
+  span:last-of-type > .ant-tag {
+    border-style: dashed;
+  }
+
+  span > .ant-tag {
+    &.ant-tag-checkable {
+      border-color: white;
+      cursor: pointer;
+
+      &.ant-tag-checkable-checked {
+        border-color: @primary-color;
+        background-color: @primary-color;
+        color: black;
+      }
+    }
+
+    & > i { color: white; }
+  }
+
+  span > input {
+    width: 8rem;
+  }
+}
+
+#song-list {
+  & li {
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+      background-color: @background-dark-hover;
+    }
+
+    & > div:nth-of-type(1) {
+      font-size: 1rem;
+      margin: 0 1rem;
+    }
+
+    & > div:nth-of-type(2) {
+      color: @text-color-song-info;
     }
   }
 }
@@ -109,6 +177,31 @@ body {
 
   & > section {
     height: inherit;
+
+    & > section {
+      background-color: @background-dark;
+      padding: 1rem 10rem;
+
+      & > div.ant-divider {
+        background-color: @text-color-song-info;
+        border-top: 0;
+      }
+    }
+  }
+}
+
+#tags-page {
+  height: 100vh;
+
+  & > section {
+    height: inherit;
+
+    & > section {
+      background-color: @background-dark;
+      padding: 1rem 10rem;
+
+      & > h1 { color: white; }
+    }
   }
 }
 
@@ -125,33 +218,3 @@ body {
     transform: translate(-50%, -70%);
   }
 }
-
-
-#home-page {
-  text-align: center;
-  
-  & > div:nth-of-type(1) {
-    background-color: @secondary-color;
-    min-height: 10vh;
-    height: auto;
-  }
-
-  & > div:nth-of-type(2){
-    background-color: @primary-color;
-    min-height: 100vh;
-    height: auto;
-
-    -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
-       -moz-animation: fadein 2s; /* Firefox < 16 */
-        -ms-animation: fadein 2s; /* Internet Explorer */
-         -o-animation: fadein 2s; /* Opera < 12.1 */
-            animation: fadein 2s;
-
-  }
- 
-}
-
- #tags_panel{
-    color: blue;
-    
-  }

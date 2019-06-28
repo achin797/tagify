@@ -23,9 +23,7 @@ body {
         height: 32px;
       }
 
-      & > ul {
-        background-color: @background-navbar;
-      }
+      & > ul { background-color: @background-navbar; }
     }
   }
 }
@@ -35,9 +33,7 @@ body {
   flex-wrap: wrap;
   margin: 0.5rem 0 1rem;
 
-  span {
-    margin-bottom: 0.5rem;
-  }
+  span { margin-bottom: 0.5rem; }
 
   span > .ant-tag, span > input {
     background-color: @background-dark;
@@ -49,12 +45,19 @@ body {
 
   span:last-of-type > .ant-tag {
     border-style: dashed;
+
+    &:hover { cursor: pointer; }
   }
 
   span > .ant-tag {
     &.ant-tag-checkable {
       border-color: white;
       cursor: pointer;
+
+      &:hover {
+        border-color: @primary-color;
+        color: @primary-color;
+      }
 
       &.ant-tag-checkable-checked {
         border-color: @primary-color;
@@ -66,9 +69,7 @@ body {
     & > i { color: white; }
   }
 
-  span > input {
-    width: 8rem;
-  }
+  span > input { width: 8rem; }
 }
 
 #song-list {
@@ -76,17 +77,22 @@ body {
     color: white;
     cursor: pointer;
 
-    &:hover {
-      background-color: @background-dark-hover;
-    }
+    &:hover { background-color: @background-dark-hover; }
 
-    & > div:nth-of-type(1) {
-      font-size: 1rem;
-      margin: 0 1rem;
-    }
+    & > div { margin-left: 1rem; }
 
-    & > div:nth-of-type(2) {
-      color: @text-color-song-info;
+    & > div:nth-of-type(1) { font-size: 1rem; }
+
+    & > div:nth-of-type(2) { color: @text-color-song-info; }
+
+    & > div:nth-of-type(3) {
+      & > div.ant-tag {
+        background-color: inherit;
+        color: white;
+        cursor: pointer;
+
+        &:hover { opacity: 1; }
+      }
     }
   }
 }
@@ -126,9 +132,7 @@ body {
     }
   }
 
-  & > div:nth-of-type(2) {
-    padding: 5rem 5rem;
-  }
+  & > div:nth-of-type(2) { padding: 5rem 5rem; }
 
   & > div:nth-of-type(3) {
     background-color: @heading-color;
@@ -140,13 +144,9 @@ body {
     position: relative;
 
     & > div:nth-of-type(1).ant-row-flex > div.ant-col > div {
-      &:first-child {
-        color: grey;
-      }
+      &:first-child { color: grey; }
 
-      &:not(:last-child) {
-        margin-bottom: 0.5rem;
-      }
+      &:not(:last-child) { margin-bottom: 0.5rem; }
     }
 
     & > div:nth-of-type(2).ant-row-flex {
@@ -159,14 +159,10 @@ body {
           color: grey;
           font-size: 0.75rem;
 
-          &:not(:last-child) {
-            margin-right: 1rem;
-          }
+          &:not(:last-child) { margin-right: 1rem; }
         }
 
-        &.ant-col-5 {
-          text-align: right;
-        }
+        &.ant-col-5 { text-align: right; }
       }
     }
   }
@@ -186,6 +182,8 @@ body {
         background-color: @text-color-song-info;
         border-top: 0;
       }
+
+      & > h1 { color: white; }
     }
   }
 }

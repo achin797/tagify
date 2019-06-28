@@ -17,6 +17,7 @@ const { CheckableTag } = Tag;
 class TagsPanel extends Component {
   constructor(props) {
     super(props);
+    this.saveRef = this.saveRef.bind(this);
     this.handleConfirm = this.handleConfirm.bind(this);
   }
 
@@ -26,7 +27,9 @@ class TagsPanel extends Component {
     }
   }
 
-  saveInputRef = input => (this.input = input);
+  saveRef(input) {
+    this.input = input;
+  }
 
   handleConfirm() {
     if (this.props.displayName) {
@@ -74,7 +77,7 @@ class TagsPanel extends Component {
         {inputVisible && (
           <span>
             <Input
-              ref={this.saveInputRef}
+              ref={this.saveRef}
               type="text"
               size="small"
               value={displayName}

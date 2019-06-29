@@ -86,13 +86,35 @@ body {
     & > div:nth-of-type(2) { color: @text-color-song-info; }
 
     & > div:nth-of-type(3) {
+      margin-top: -0.3rem;
+
       & > div.ant-tag {
         background-color: inherit;
         color: white;
         cursor: pointer;
+        margin-top: 0.3rem;
 
         &:hover { opacity: 1; }
       }
+    }
+  }
+}
+
+.add-tag-dropdown-menu {
+  min-width: unset !important;
+
+  & > ul {
+    background-color: #2e2e2e;
+
+    & > li {
+      color: white;
+
+      &.ant-dropdown-menu-item-selected {
+        background-color: #2e2e2e;
+        color: @primary-color;
+      }
+
+      &:hover { background-color: #3d3d3d; }
     }
   }
 }

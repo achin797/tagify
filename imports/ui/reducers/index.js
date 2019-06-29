@@ -131,12 +131,40 @@ const tagsReducer = (
 
 const songsReducer = (
   state = {
-    songs,
-    displayedSongs: songs
+    songs
   },
   action
 ) => {
-  switch (action.payload) {
+  switch (action.type) {
+    case 'ADD_TAG_TO_SONG':
+      return {
+        ...state,
+        songs: state.songs.map(song => {
+          return song.id === action.payload.songId
+            ? {
+              ...song,
+              tags: [
+                ...song.tags,
+                action.payload.tagId
+              ]
+            }
+            : song;
+        })
+      };
+    case 'REMOVE_TAG_FROM_SONG':
+      return {
+        ...state,
+        songs: state.songs.map(song => {
+          return song.id === action.payload.songId
+            ? {
+              ...song,
+              tags: song.tags.filter(id => {
+                return id !== action.payload.tagId;
+              })
+            }
+            : song;
+        })
+      };
     default:
       return state;
   }

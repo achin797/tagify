@@ -27,7 +27,7 @@ const SongList = ({
 
 const mapStateToProps = state => {
   return {
-    songs: state.songs.displayedSongs,
+    songs: state.songs.songs,
     checkedTags: state.tagsPanel.checkedTags
   };
 };

@@ -37,3 +37,17 @@ export const toggleCheckTag = tagId => {
     payload: tagId
   };
 };
+
+export const addTagToSong = (songId, tagId) => {
+  return {
+    type: 'ADD_TAG_TO_SONG',
+    payload: { songId, tagId }
+  };
+};
+
+export const removeTagFromSong = (songId, tagId) => {
+  return {
+    type: 'REMOVE_TAG_FROM_SONG',
+    payload: { songId, tagId }
+  };
+};

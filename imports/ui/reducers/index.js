@@ -11,36 +11,49 @@ const id = idGenerator();
 const tags = [];
 tags.push({ id: id.next().value, displayName: 'chill' });
 tags.push({ id: id.next().value, displayName: 'shower' });
+tags.push({ id: id.next().value, displayName: 'bus ride' });
 const songs = [];
 songs.push({
   id: id.next().value,
   title: 'Intergalactic',
   artist: 'Beastie Boys',
-  album: 'Hello Nasty'
+  album: 'Hello Nasty',
+  tags: [1]
 });
 songs.push({
   id: id.next().value,
   title: 'Flamingo',
   artist: 'Kero Kero Bonito',
-  album: 'shh#ffb6c1'
+  album: 'shh#ffb6c1',
+  tags: [2]
 });
 songs.push({
   id: id.next().value,
   title: 'Price Tag',
   artist: 'Jessie J ft. B.o.B',
-  album: 'Who You Are'
+  album: 'Who You Are',
+  tags: []
 });
 songs.push({
   id: id.next().value,
   title: `God's Plan`,
   artist: 'Drake',
-  album: 'Scorpion'
+  album: 'Scorpion',
+  tags: [1, 2]
 });
 songs.push({
   id: id.next().value,
   title: 'Outside with the Cuties',
   artist: 'Frankie Cosmos',
-  album: 'Next Thing'
+  album: 'Next Thing',
+  tags: [1, 3]
+});
+songs.push({
+  id: id.next().value,
+  title: 'Lose Yourself',
+  artist: 'Eminem',
+  album: '8 Mile',
+  tags: [1, 2, 3]
 });
 
 const tagsPanelReducer = (
@@ -118,12 +131,40 @@ const tagsReducer = (
 
 const songsReducer = (
   state = {
-    songs,
-    displayedSongs: songs
+    songs
   },
   action
 ) => {
-  switch (action.payload) {
+  switch (action.type) {
+    case 'ADD_TAG_TO_SONG':
+      return {
+        ...state,
+        songs: state.songs.map(song => {
+          return song.id === action.payload.songId
+            ? {
+              ...song,
+              tags: [
+                ...song.tags,
+                action.payload.tagId
+              ]
+            }
+            : song;
+        })
+      };
+    case 'REMOVE_TAG_FROM_SONG':
+      return {
+        ...state,
+        songs: state.songs.map(song => {
+          return song.id === action.payload.songId
+            ? {
+              ...song,
+              tags: song.tags.filter(id => {
+                return id !== action.payload.tagId;
+              })
+            }
+            : song;
+        })
+      };
     default:
       return state;
   }

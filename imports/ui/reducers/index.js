@@ -165,6 +165,16 @@ const songsReducer = (
             : song;
         })
       };
+    case 'DELETE_TAG':
+      return {
+        ...state,
+        songs: state.songs.map(song => {
+          return {
+            ...song,
+            tags: song.tags.filter(id => id !== action.payload)
+          };
+        })
+      };
     default:
       return state;
   }

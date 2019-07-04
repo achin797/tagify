@@ -45,6 +45,13 @@ export const addTagToSong = (songId, tagId) => {
   };
 };
 
+export const addSongs = songs => {
+    return {
+        type: 'ADD_SONGS',
+        payload: songs,
+    };
+};
+
 export const removeTagFromSong = (songId, tagId) => {
   return {
     type: 'REMOVE_TAG_FROM_SONG',

@@ -41,7 +41,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getTags: async userSpotifyId => {
+    getTags: userSpotifyId => {
       dispatch(getTagsRequest());
       Meteor.call('getUserTags', userSpotifyId, (err, response) => {
         if (err) {

@@ -202,13 +202,17 @@ const songsReducer = (
 };
 
 const userReducer = (
-  // TODO cahnge userSpotifyId to null
   state = {
-    userSpotifyId: 1
+    userSpotifyId: null
   },
   action
 ) => {
   switch (action.type) {
+    case 'SIGN_IN_SUCCESS':
+      return {
+        ...state,
+        userSpotifyId: action.payload
+      };
     default:
       return state;
   }

@@ -3,9 +3,14 @@ import { connect } from 'react-redux';
 import Tag from 'antd/lib/tag';
 import Input from 'antd/lib/input';
 import Icon from 'antd/lib/icon';
+import notification from 'antd/lib/notification';
 import {
-  createTag,
-  deleteTag,
+  createTagRequest,
+  createTagSuccess,
+  createTagFailure,
+  deleteTagRequest,
+  deleteTagSuccess,
+  deleteTagFailure,
   tagsPanelShowInput as showInput,
   tagsPanelHideInput as hideInput,
   onChangeDisplayName as handleChange,
@@ -32,10 +37,12 @@ class TagsPanel extends Component {
   }
 
   handleConfirm() {
-    if (this.props.displayName) {
-      this.props.createTag(this.props.displayName);
+    const { displayName, userSpotifyId, createTag, hideInput } = this.props;
+    if (displayName) {
+      createTag(userSpotifyId, displayName);
+    } else {
+      hideInput();
     }
-    this.props.hideInput();
   }
 
   render() {
@@ -44,7 +51,9 @@ class TagsPanel extends Component {
       tags,
       checkedTags,
       inputVisible,
+      isInputDisabled,
       displayName,
+      userSpotifyId,
       deleteTag,
       showInput,
       handleChange,
@@ -54,9 +63,10 @@ class TagsPanel extends Component {
     return (
       <div id="tags-panel">
         {editable && tags.map((tag, index) => {
+          console.log(tag);
           return (
             <span key={index}>
-              <Tag closable onClose={() => deleteTag(tag.id)}>
+              <Tag closable onClose={e => deleteTag(userSpotifyId, tag.id, e)}>
                 {tag.displayName}
               </Tag>
             </span>
@@ -78,8 +88,9 @@ class TagsPanel extends Component {
           <span>
             <Input
               ref={this.saveRef}
-              type="text"
+              disabled={isInputDisabled}
               size="small"
+              type="text"
               value={displayName}
               onChange={e => handleChange(e.target.value)}
               onBlur={this.handleConfirm}
@@ -104,15 +115,51 @@ const mapStateToProps = state => {
     tags: state.tags.tags,
     checkedTags: state.tagsPanel.checkedTags,
     inputVisible: state.tagsPanel.inputVisible,
-    displayName: state.tagsPanel.displayName
+    isInputDisabled: state.tagsPanel.isInputDisabled,
+    displayName: state.tagsPanel.displayName,
+    userSpotifyId: state.user.userSpotifyId
   };
 };
 
-export default connect(mapStateToProps, {
-  createTag,
-  deleteTag,
-  showInput,
-  hideInput,
-  handleChange,
-  toggleCheckTag
-})(TagsPanel);
+const mapDispatchToProps = dispatch => {
+  return {
+    createTag: (userSpotifyId, displayName) => {
+      dispatch(createTagRequest());
+      Meteor.call('createTag', userSpotifyId, displayName, (err, response) => {
+        if (err) {
+          dispatch(createTagFailure());
+          notification.error({
+            message: 'Create Tag Failed',
+            description: 'Tag could not be created. Please try again.'
+          });
+        } else {
+          dispatch(createTagSuccess(response));
+        }
+      });
+    },
+    deleteTag: (userSpotifyId, tagId, e) => {
+      e.preventDefault();
+      dispatch(deleteTagRequest(tagId));
+      Meteor.call('deleteTag', userSpotifyId, tagId, err => {
+        if (err) {
+          dispatch(deleteTagFailure());
+          notification.error({
+            message: 'Delete Tag Failed',
+            description: 'Tag could not be deleted. Please reload the page.',
+          });
+        } else {
+          dispatch(deleteTagSuccess());
+        }
+      });
+    },
+    showInput: () => dispatch(showInput()),
+    hideInput: () => dispatch(hideInput()),
+    handleChange: value => dispatch(handleChange(value)),
+    toggleCheckTag: tagId => dispatch(toggleCheckTag(tagId))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TagsPanel);

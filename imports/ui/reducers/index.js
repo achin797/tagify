@@ -8,24 +8,20 @@ function* idGenerator() {
 }
 
 const id = idGenerator();
-const tags = [];
-tags.push({ id: id.next().value, displayName: 'chill' });
-tags.push({ id: id.next().value, displayName: 'shower' });
-tags.push({ id: id.next().value, displayName: 'bus ride' });
 const songs = [];
 songs.push({
   id: id.next().value,
   title: 'Intergalactic',
   artist: 'Beastie Boys',
   album: 'Hello Nasty',
-  tags: [1]
+  tags: []
 });
 songs.push({
   id: id.next().value,
   title: 'Flamingo',
   artist: 'Kero Kero Bonito',
   album: 'shh#ffb6c1',
-  tags: [2]
+  tags: []
 });
 songs.push({
   id: id.next().value,
@@ -39,27 +35,28 @@ songs.push({
   title: `God's Plan`,
   artist: 'Drake',
   album: 'Scorpion',
-  tags: [1, 2]
+  tags: []
 });
 songs.push({
   id: id.next().value,
   title: 'Outside with the Cuties',
   artist: 'Frankie Cosmos',
   album: 'Next Thing',
-  tags: [1, 3]
+  tags: []
 });
 songs.push({
   id: id.next().value,
   title: 'Lose Yourself',
   artist: 'Eminem',
   album: '8 Mile',
-  tags: [1, 2, 3]
+  tags: []
 });
 
 const tagsPanelReducer = (
   state = {
     checkedTags: [],
     inputVisible: false,
+    isInputDisabled: false,
     displayName: ''
   },
   action
@@ -81,6 +78,23 @@ const tagsPanelReducer = (
         ...state,
         displayName: action.payload
       };
+    case 'CREATE_TAG_REQUEST':
+      return {
+        ...state,
+        isInputDisabled: true
+      };
+    case 'CREATE_TAG_SUCCESS':
+      return {
+        ...state,
+        inputVisible: false,
+        isInputDisabled: false,
+        displayName: ''
+      };
+    case 'CREATE_TAG_FAILURE':
+      return {
+        ...state,
+        isInputDisabled: false
+      };
     case 'TOGGLE_CHECK_TAG':
       return state.checkedTags.includes(action.payload)
         ? {
@@ -96,6 +110,11 @@ const tagsPanelReducer = (
             action.payload
           ]
         };
+    case 'DELETE_TAG_REQUEST':
+      return {
+        ...state,
+        checkedTags: state.checkedTags.filter(id => id !== action.payload)
+      };
     default:
       return state;
   }
@@ -103,23 +122,25 @@ const tagsPanelReducer = (
 
 const tagsReducer = (
   state = {
-    tags
+    tags: []
   },
   action
 ) => {
   switch (action.type) {
-    case 'CREATE_TAG':
+    case 'GET_TAGS_SUCCESS':
+      return {
+        ...state,
+        tags: action.payload
+      };
+    case 'CREATE_TAG_SUCCESS':
       return {
         ...state,
         tags: [
           ...state.tags,
-          {
-            id: id.next().value,
-            displayName: action.payload
-          }
+          action.payload
         ]
       }
-    case 'DELETE_TAG':
+    case 'DELETE_TAG_REQUEST':
       return {
         ...state,
         tags: state.tags.filter(t => t.id !== action.payload)
@@ -165,7 +186,7 @@ const songsReducer = (
             : song;
         })
       };
-    case 'DELETE_TAG':
+    case 'DELETE_TAG_REQUEST':
       return {
         ...state,
         songs: state.songs.map(song => {
@@ -180,8 +201,26 @@ const songsReducer = (
   }
 };
 
+const userReducer = (
+  state = {
+    userSpotifyId: null
+  },
+  action
+) => {
+  switch (action.type) {
+    case 'SIGN_IN_SUCCESS':
+      return {
+        ...state,
+        userSpotifyId: action.payload
+      };
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   tagsPanel: tagsPanelReducer,
   tags: tagsReducer,
-  songs: songsReducer
+  songs: songsReducer,
+  user: userReducer
 });

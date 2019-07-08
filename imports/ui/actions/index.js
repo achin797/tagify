@@ -1,14 +1,76 @@
-export const createTag = displayName => {
+export const signInRequest = () => {
   return {
-    type: 'CREATE_TAG',
-    payload: displayName
+    type: 'SIGN_IN_REQUEST'
   };
 };
 
-export const deleteTag = tagId => {
+export const signInSuccess = userSpotifyId => {
   return {
-    type: 'DELETE_TAG',
+    type: 'SIGN_IN_SUCCESS',
+    payload: userSpotifyId
+  };
+};
+
+export const signInFailure = () => {
+  return {
+    type: 'SIGN_IN_FAILURE'
+  };
+};
+
+export const getTagsRequest = () => {
+  return {
+    type: 'GET_TAGS_REQUEST'
+  };
+};
+
+export const getTagsSuccess = tags => {
+  return {
+    type: 'GET_TAGS_SUCCESS',
+    payload: tags
+  };
+};
+
+export const getTagsFailure = () => {
+  return {
+    type: 'GET_TAGS_FAILURE'
+  };
+};
+
+export const createTagRequest = () => {
+  return {
+    type: 'CREATE_TAG_REQUEST'
+  };
+};
+
+export const createTagSuccess = tag => {
+  return {
+    type: 'CREATE_TAG_SUCCESS',
+    payload: tag
+  };
+};
+
+export const createTagFailure = () => {
+  return {
+    type: 'CREATE_TAG_FAILURE'
+  };
+};
+
+export const deleteTagRequest = tagId => {
+  return {
+    type: 'DELETE_TAG_REQUEST',
     payload: tagId
+  };
+};
+
+export const deleteTagSuccess = () => {
+  return {
+    type: 'DELETE_TAG_SUCCESS'
+  };
+};
+
+export const deleteTagFailure = () => {
+  return {
+    type: 'DELETE_TAG_FAILURE'
   };
 };
 

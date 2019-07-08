@@ -63,9 +63,10 @@ class TagsPanel extends Component {
     return (
       <div id="tags-panel">
         {editable && tags.map((tag, index) => {
+          console.log(tag);
           return (
             <span key={index}>
-              <Tag closable onClose={() => deleteTag(userSpotifyId, tag.id)}>
+              <Tag closable onClose={e => deleteTag(userSpotifyId, tag.id, e)}>
                 {tag.displayName}
               </Tag>
             </span>
@@ -122,7 +123,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    createTag: async (userSpotifyId, displayName) => {
+    createTag: (userSpotifyId, displayName) => {
       dispatch(createTagRequest());
       Meteor.call('createTag', userSpotifyId, displayName, (err, response) => {
         if (err) {
@@ -136,7 +137,8 @@ const mapDispatchToProps = dispatch => {
         }
       });
     },
-    deleteTag: async (userSpotifyId, tagId) => {
+    deleteTag: (userSpotifyId, tagId, e) => {
+      e.preventDefault();
       dispatch(deleteTagRequest(tagId));
       Meteor.call('deleteTag', userSpotifyId, tagId, err => {
         if (err) {

@@ -1,8 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Typography from 'antd/lib/typography';
 import Button from 'antd/lib/button';
+import {
+  signInRequest,
+  signInSuccess,
+  signInFailure
+} from '../actions';
 
 const { Title, Paragraph } = Typography;
 
@@ -10,33 +16,23 @@ const scrollToExplanation = () => {
   document.getElementById('auth-page-sign-in-explanation').scrollIntoView();
 };
 
-const AuthPageSignIn = (props) => (
+const AuthPageSignIn = ({
+  history,
+  signIn
+}) => (
   <div id="auth-page-sign-in">
     <div>
       <div>
         <Title>Tags for everyone.</Title>
         <Title level={4}>Millions of songs. No playlists needed.</Title>
-          <Button
-              shape="round"
-              size="large"
-              type="primary"
-              onClick={() => {
-                  let options = {
-                      showDialog: true, // Whether or not to force the user to approve the app again if they’ve already done so.
-                      requestPermissions: ['user-read-email', 'user-library-read', 'user-library-modify'] // Spotify access scopes.
-                  };
-                  Meteor.loginWithSpotify(options, function (err) {
-                      if(err){
-                          console.log(err);
-                      }
-                      else{
-                          props.history.push("/home");
-                      }
-                  });
-              }}
-          >
-              Log in with Spotify
-          </Button>
+        <Button
+          shape="round"
+          size="large"
+          type="primary"
+          onClick={() => signIn(history)}
+        >
+          Log in with Spotify
+        </Button>
       </div>
       <Button
         type="link"
@@ -102,4 +98,36 @@ const AuthPageSignIn = (props) => (
   </div>
 );
 
-export default AuthPageSignIn;
+const mapStateToProps = state => {
+  return {};
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    signIn: history => {
+      const signInOptions = {
+        showDialog: true,
+        requestPermissions: [
+          'user-read-email',
+          'user-library-read',
+          'user-library-modify'
+        ]
+      };
+      Meteor.loginWithSpotify(signInOptions, err => {
+        if (err) {
+          dispatch(signInFailure());
+          console.log(err);
+        } else {
+          const userSpotifyId = Meteor.user().services.spotify.id;
+          dispatch(signInSuccess(userSpotifyId));
+          history.push('/home');
+        }
+      });
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AuthPageSignIn);

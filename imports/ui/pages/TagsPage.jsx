@@ -15,7 +15,7 @@ const { Title } = Typography;
 
 class TagsPage extends Component {
   componentDidMount() {
-    this.props.getTags(this.props.userSpotifyId);
+    this.props.getTags();
   }
 
   render() {
@@ -34,16 +34,14 @@ class TagsPage extends Component {
 }
 
 const mapStateToProps = state => {
-  return {
-    userSpotifyId: state.user.userSpotifyId
-  };
+  return {};
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getTags: userSpotifyId => {
+    getTags: () => {
       dispatch(getTagsRequest());
-      Meteor.call('getUserTags', userSpotifyId, (err, response) => {
+      Meteor.call('getUserTags', Meteor.userId(), (err, response) => {
         if (err) {
           dispatch(getTagsFailure());
           notification.error({

@@ -1,22 +1,3 @@
-export const signInRequest = () => {
-  return {
-    type: 'SIGN_IN_REQUEST'
-  };
-};
-
-export const signInSuccess = userSpotifyId => {
-  return {
-    type: 'SIGN_IN_SUCCESS',
-    payload: userSpotifyId
-  };
-};
-
-export const signInFailure = () => {
-  return {
-    type: 'SIGN_IN_FAILURE'
-  };
-};
-
 export const getTagsRequest = () => {
   return {
     type: 'GET_TAGS_REQUEST'

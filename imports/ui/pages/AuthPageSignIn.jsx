@@ -4,11 +4,6 @@ import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Typography from 'antd/lib/typography';
 import Button from 'antd/lib/button';
-import {
-  signInRequest,
-  signInSuccess,
-  signInFailure
-} from '../actions';
 
 const { Title, Paragraph } = Typography;
 
@@ -115,11 +110,8 @@ const mapDispatchToProps = dispatch => {
       };
       Meteor.loginWithSpotify(signInOptions, err => {
         if (err) {
-          dispatch(signInFailure());
           console.log(err);
         } else {
-          const userSpotifyId = Meteor.user().services.spotify.id;
-          dispatch(signInSuccess(userSpotifyId));
           history.push('/home');
         }
       });

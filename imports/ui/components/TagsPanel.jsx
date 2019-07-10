@@ -37,9 +37,9 @@ class TagsPanel extends Component {
   }
 
   handleConfirm() {
-    const { displayName, userSpotifyId, createTag, hideInput } = this.props;
+    const { displayName, createTag, hideInput } = this.props;
     if (displayName) {
-      createTag(userSpotifyId, displayName);
+      createTag(displayName);
     } else {
       hideInput();
     }
@@ -53,7 +53,6 @@ class TagsPanel extends Component {
       inputVisible,
       isInputDisabled,
       displayName,
-      userSpotifyId,
       deleteTag,
       showInput,
       handleChange,
@@ -63,10 +62,9 @@ class TagsPanel extends Component {
     return (
       <div id="tags-panel">
         {editable && tags.map((tag, index) => {
-          console.log(tag);
           return (
             <span key={index}>
-              <Tag closable onClose={e => deleteTag(userSpotifyId, tag.id, e)}>
+              <Tag closable onClose={e => deleteTag(tag.id, e)}>
                 {tag.displayName}
               </Tag>
             </span>
@@ -116,16 +114,15 @@ const mapStateToProps = state => {
     checkedTags: state.tagsPanel.checkedTags,
     inputVisible: state.tagsPanel.inputVisible,
     isInputDisabled: state.tagsPanel.isInputDisabled,
-    displayName: state.tagsPanel.displayName,
-    userSpotifyId: state.user.userSpotifyId
+    displayName: state.tagsPanel.displayName
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    createTag: (userSpotifyId, displayName) => {
+    createTag: displayName => {
       dispatch(createTagRequest());
-      Meteor.call('createTag', userSpotifyId, displayName, (err, response) => {
+      Meteor.call('createTag', Meteor.userId(), displayName, (err, response) => {
         if (err) {
           dispatch(createTagFailure());
           notification.error({
@@ -137,10 +134,10 @@ const mapDispatchToProps = dispatch => {
         }
       });
     },
-    deleteTag: (userSpotifyId, tagId, e) => {
+    deleteTag: (tagId, e) => {
       e.preventDefault();
       dispatch(deleteTagRequest(tagId));
-      Meteor.call('deleteTag', userSpotifyId, tagId, err => {
+      Meteor.call('deleteTag', Meteor.userId(), tagId, err => {
         if (err) {
           dispatch(deleteTagFailure());
           notification.error({

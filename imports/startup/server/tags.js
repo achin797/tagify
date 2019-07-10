@@ -1,27 +1,25 @@
-Users = new Mongo.Collection('Users');
-
 Meteor.methods({
-  getUserTags: userSpotifyId => {
-    const user = Users.findOne({ 'userSpotifyId': userSpotifyId });
-    if (user) {
-      return user.tags;
-    } else {
-      Users.insert({ 'userSpotifyId': userSpotifyId, tags: [] });
-      return [];
+  getUserTags: userId => {
+    const user = Meteor.users.findOne(userId);
+    if (user.tags === undefined) {
+      Meteor.users.update(userId, {
+        $set: { tags: [] }
+      });
     }
+    return user.tags;
   },
-  createTag: (userSpotifyId, displayName) => {
+  createTag: (userId, displayName) => {
     const tag = {
       id: Date.now(),
       displayName
     };
-    Users.update({ 'userSpotifyId': userSpotifyId }, {
+    Meteor.users.update(userId, {
       $push: { tags: tag }
     });
     return tag;
   },
-  deleteTag: (userSpotifyId, tagId) => {
-    Users.update({ 'userSpotifyId': userSpotifyId }, {
+  deleteTag: (userId, tagId) => {
+    Meteor.users.update(userId, {
       $pull: { tags: { id: tagId } }
     });
   }

@@ -1,35 +1,54 @@
-import React from 'react'
+import React, {Component} from 'react'
 import { connect } from 'react-redux';
 import List from 'antd/lib/list';
 import TaggableSong from './TaggableSong';
+import {loadSongs} from "../actions";
 
-const SongList = ({
-  songs,
-  checkedTags
-}) => {
-  const dataSource = checkedTags.length === 0
-    ? songs
-    : songs.filter(song => {
-      return song.tags.some(tag => {
-        return checkedTags.includes(tag);
-      })
-    });
+class SongList extends Component{
+  constructor(props){
+    super(props);
+  }
 
-  return (
-    <div id="song-list">
-      <List
-        dataSource={dataSource}
-        renderItem={song => <TaggableSong song={song} />}
-      />
-    </div>
-  );
-};
+  componentDidMount() {
+
+    //Use local state to avoid repeated api calls
+
+    if(!this.props.hasLoaded) {
+      Meteor.call("getSavedTracks", (err, response) => {
+          console.log("This message should only display on initial load");
+          this.props.loadSongs(response);
+        }
+      )
+    }
+  }
+
+  render(){
+    const dataSource = this.props.checkedTags.length === 0
+      ? this.props.songs
+      : this.props.songs.filter(song => {
+        return song.tags.some(tag => {
+          return this.props.checkedTags.includes(tag);
+        })
+      });
+
+    return (
+      <div id="song-list">
+        <List
+          loading={!this.props.hasLoaded}
+          dataSource={dataSource}
+          renderItem={song => <TaggableSong song={song} />}
+        />
+      </div>
+    );
+  }
+}
 
 const mapStateToProps = state => {
   return {
     songs: state.songs.songs,
+    hasLoaded: state.songs.hasLoaded,
     checkedTags: state.tagsPanel.checkedTags
   };
 };
 
-export default connect(mapStateToProps, {})(SongList);
+export default connect(mapStateToProps, {loadSongs})(SongList);

@@ -88,9 +88,9 @@ export const addTagToSong = (songId, tagId) => {
   };
 };
 
-export const addSongs = songs => {
+export const loadSongs = songs => {
     return {
-        type: 'ADD_SONGS',
+        type: 'LOAD_SONGS',
         payload: songs,
     };
 };

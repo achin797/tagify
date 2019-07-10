@@ -7,50 +7,7 @@ function* idGenerator() {
   }
 }
 
-const id = idGenerator();
 const songs = [];
-songs.push({
-  id: id.next().value,
-  title: 'Intergalactic',
-  artist: 'Beastie Boys',
-  album: 'Hello Nasty',
-  tags: []
-});
-songs.push({
-  id: id.next().value,
-  title: 'Flamingo',
-  artist: 'Kero Kero Bonito',
-  album: 'shh#ffb6c1',
-  tags: []
-});
-songs.push({
-  id: id.next().value,
-  title: 'Price Tag',
-  artist: 'Jessie J ft. B.o.B',
-  album: 'Who You Are',
-  tags: []
-});
-songs.push({
-  id: id.next().value,
-  title: `God's Plan`,
-  artist: 'Drake',
-  album: 'Scorpion',
-  tags: []
-});
-songs.push({
-  id: id.next().value,
-  title: 'Outside with the Cuties',
-  artist: 'Frankie Cosmos',
-  album: 'Next Thing',
-  tags: []
-});
-songs.push({
-  id: id.next().value,
-  title: 'Lose Yourself',
-  artist: 'Eminem',
-  album: '8 Mile',
-  tags: []
-});
 
 const tagsPanelReducer = (
   state = {
@@ -152,11 +109,18 @@ const tagsReducer = (
 
 const songsReducer = (
   state = {
+    hasLoaded: false,
     songs
   },
   action
 ) => {
   switch (action.type) {
+    case 'LOAD_SONGS':
+      return {
+        ...state,
+        hasLoaded: true,
+        songs: action.payload
+      };
     case 'ADD_TAG_TO_SONG':
       return {
         ...state,

@@ -79,7 +79,7 @@ class TaggableSong extends Component {
             {song.title}
           </div>
           <div>
-            <span>{song.artist} - {song.album}</span>
+            <span>{song.artists.join(", ")} - {song.album}</span>
           </div>
           <div>
             {song.tags.map((tagId, index) => {

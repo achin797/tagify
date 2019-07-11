@@ -105,7 +105,8 @@ const mapDispatchToProps = dispatch => {
         requestPermissions: [
           'user-read-email',
           'user-library-read',
-          'user-library-modify'
+          'user-library-modify',
+          'playlist-modify-public'
         ]
       };
       Meteor.loginWithSpotify(signInOptions, err => {

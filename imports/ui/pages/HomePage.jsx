@@ -11,6 +11,24 @@ import {connect} from "react-redux";
 const { Title } = Typography;
 
 class HomePage extends Component{
+
+  createPlaylist(){
+    let playlistName = this.props.checkedTags.join(", ");
+
+    //fetching the songs to add to playlist based on selected tags
+    let selected_songs = this.props.songs.filter(song => {
+      return song.tags.some(tag => {
+        return this.props.checkedTags.includes(tag);
+      })
+    });
+
+    Meteor.call("createPlaylist", playlistName, selected_songs, (err, response) => {
+        console.log("This message should only display after playlist creation");
+        console.log(response);
+      }
+    )
+  }
+
   render(){
         return (
             <div id="home-page">
@@ -39,7 +57,8 @@ class HomePage extends Component{
 
 const mapStateToProps = state => {
   return {
-    checkedTags: state.tagsPanel.checkedTags
+    checkedTags: state.tagsPanel.checkedTags,
+    songs: state.songs.songs
   };
 };
 

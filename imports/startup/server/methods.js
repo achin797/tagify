@@ -20,23 +20,26 @@ Meteor.methods({
 
         return response.data.body.tracks.items;
     },
-    createPlaylist: function(selectedTracks, playlistName) {
+
+    //TODO: Add error case handling and better playlist naming
+    createPlaylist: function(playlistName, selectedTracks) {
         if (!selectedTracks || !playlistName || selectedTracks.length > 20) throw new Error("No tracks or playlist name specified");
 
         // Call
         var spotifyApi = new SpotifyWebApi();
-        var response = spotifyApi.createPlaylist(Meteor.user().services.spotify.id, playlistName, { public: false });
+        var response = spotifyApi.createPlaylist(Meteor.user().services.spotify.id, playlistName, { public: true });
 
         // Need to refresh token
         if (checkTokenRefreshed(response, spotifyApi)) {
-            response = spotifyApi.createPlaylist(Meteor.user().services.spotify.id, playlistName, { public: false });
+            response = spotifyApi.createPlaylist(Meteor.user().services.spotify.id, playlistName, { public: true });
         }
 
         // Put songs into the playlist.
         var uris = selectedTracks.map(function(track) {
-            return track.uri;
+            return "spotify:track:"+track.id;
         });
-        spotifyApi.addTracksToPlaylist(Meteor.user().services.spotify.id, response.data.body.id, uris, {});
+
+        response = spotifyApi.addTracksToPlaylist(Meteor.user().services.spotify.id, response.data.body.id, uris, {});
 
         return response.data.body;
     },

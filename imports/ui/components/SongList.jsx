@@ -26,9 +26,16 @@ class SongList extends Component{
     const dataSource = this.props.checkedTags.length === 0
       ? this.props.songs
       : this.props.songs.filter(song => {
-        return song.tags.some(tag => {
-          return this.props.checkedTags.includes(tag);
-        })
+        if (this.props.andToggle) {
+          //TODO: simplify statement?
+          return this.props.checkedTags.every(checkedTag => {
+            return song.tags.some(tag => tag === checkedTag)
+          })
+        } else {
+          return song.tags.some(tag => {
+            return this.props.checkedTags.includes(tag);
+          })
+        }
       });
 
     return (

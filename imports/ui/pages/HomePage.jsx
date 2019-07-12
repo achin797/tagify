@@ -9,13 +9,25 @@ import {Button} from "antd";
 import {connect} from "react-redux";
 import {getTagsFailure, getTagsRequest, getTagsSuccess} from "../actions";
 import notification from "antd/lib/notification";
+import Switch from "antd/lib/switch";
 
 const { Title } = Typography;
 
 class HomePage extends Component{
 
+  constructor(props) {
+    super(props);
+    this.state = {andOrToggle: false};
+  }
+
   componentDidMount() {
     this.props.getTags();
+  }
+
+  flipToggle(){
+    this.setState({
+      andOrToggle: !this.state.andOrToggle
+    })
   }
 
   createPlaylist(){
@@ -58,8 +70,15 @@ class HomePage extends Component{
                           </Button>
                         </span>
                         <Divider />
-                        <Title>Liked Songs</Title>
-                        <SongList />
+                        <Title>Liked Songs
+                          <Switch
+                            className="and-or-toggle"
+                            checkedChildren="AND"
+                            unCheckedChildren="OR"
+                            onChange={() => this.flipToggle()}
+                            />
+                        </Title>
+                        <SongList andToggle={this.state.andOrToggle}/>
                     </Layout>
                 </Layout>
             </div>

@@ -203,7 +203,7 @@ const songsReducer = (
 
 const userReducer = (
   state = {
-    userSpotifyId: null
+    userSpotifyId: 1
   },
   action
 ) => {
@@ -211,7 +211,8 @@ const userReducer = (
     case 'SIGN_IN_SUCCESS':
       return {
         ...state,
-        userSpotifyId: action.payload
+        userSpotifyId: 1
+        // action.payload
       };
     default:
       return state;

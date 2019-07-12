@@ -25,12 +25,12 @@ Meteor.methods({
       $pull: { tags: { id: tagId } }
     });
   },
-  addTaggedSong: (userSpotifyId, tagId, songId) => {
-    const songExists = Users.findOne({ 'userSpotifyId': userSpotifyId }).taggedSongs.findOne({ id: songId });
-    // const song = user.taggedSongs.findOne({ 'id': songId });
+  
+  addSongTag: (userSpotifyId, tagId, songId) => {
+    const songExists = Users.findOne({ 'userSpotifyId': userSpotifyId, "taggedSongs.id": songId });
     if (songExists){
-        songExists.update({ 'userSpotifyId': userSpotifyId }, {
-            $push: { tags: tagId }
+        Users.update({ 'userSpotifyId': userSpotifyId, "taggedSongs.id": songId }, {
+            $push: { "taggedSongs.$.tags": tagId }
         });
     } else {
         Users.update({ 
@@ -38,5 +38,28 @@ Meteor.methods({
             $push: { taggedSongs: { id: songId, tags : [tagId] } }
             });
         }
+    },
+
+  removeSongTag: (userSpotifyId, tagId, songId) => {
+    const songExists = Users.findOne({ 'userSpotifyId': userSpotifyId, "taggedSongs.id": songId });
+    if (songExists){
+      console.log("yup");
+      Users.update({ 'userSpotifyId': userSpotifyId, "taggedSongs.id": songId }, {
+          $pull: { "taggedSongs.$.tags": tagId }
+      });
+      const songHasTag = Users.findOne({ 'userSpotifyId': userSpotifyId, "taggedSongs.id": songId,  "taggedSongs.$songID.tags": [] } );
+      console.log(songHasTag);
+
+      if(songHasTag){
+        console.log("nope");
+        Users.update({ 
+          'userSpotifyId': userSpotifyId }, {
+          $pull: { taggedSongs: { id: songId } }
+          });
+      }
     }
+     
+  }
+
+
 });

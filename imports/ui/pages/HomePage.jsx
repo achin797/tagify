@@ -7,10 +7,16 @@ import TagsPanel from '../components/TagsPanel';
 import SongList from '../components/SongList';
 import {Button} from "antd";
 import {connect} from "react-redux";
+import {getTagsFailure, getTagsRequest, getTagsSuccess} from "../actions";
+import notification from "antd/lib/notification";
 
 const { Title } = Typography;
 
 class HomePage extends Component{
+
+  componentDidMount() {
+    this.props.getTags();
+  }
 
   createPlaylist(){
     let playlistName = this.props.checkedTags.join(", ");
@@ -62,4 +68,26 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, {})(HomePage);
+const mapDispatchToProps = dispatch => {
+  return {
+    getTags: () => {
+      dispatch(getTagsRequest());
+      Meteor.call('getUserTags', Meteor.userId(), (err, response) => {
+        if (err) {
+          dispatch(getTagsFailure());
+          notification.error({
+            message: 'Fetch Tags Failed',
+            description: 'Tags could not be fetched. Please reload the page.'
+          });
+        } else {
+          dispatch(getTagsSuccess(response));
+        }
+      });
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HomePage);

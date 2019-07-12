@@ -23,7 +23,8 @@ Meteor.methods({
 
     //TODO: Add error case handling and better playlist naming
     createPlaylist: function(playlistName, selectedTracks) {
-        if (!selectedTracks || !playlistName || selectedTracks.length > 20) throw new Error("No tracks or playlist name specified");
+        if (selectedTracks.length === 0)
+          throw new Meteor.Error("Cannot generate empty playlist");
 
         // Call
         var spotifyApi = new SpotifyWebApi();

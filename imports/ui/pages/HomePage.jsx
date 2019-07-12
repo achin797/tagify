@@ -29,10 +29,16 @@ class HomePage extends Component{
     });
 
     Meteor.call("createPlaylist", playlistName, selected_songs, (err, response) => {
-        console.log("This message should only display after playlist creation");
-        console.log(response);
+      if (err) {
+        notification.error({
+          message: err.error
+        });
+      } else {
+        notification.success({
+          message: "Added playlist to your library"
+        });
       }
-    )
+    })
   }
 
   render(){

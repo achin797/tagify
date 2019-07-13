@@ -10,6 +10,7 @@ import {connect} from "react-redux";
 import {getTagsFailure, getTagsRequest, getTagsSuccess} from "../actions";
 import notification from "antd/lib/notification";
 import Switch from "antd/lib/switch";
+import {getToggledSongs} from "../utils/helpers";
 
 const { Title } = Typography;
 
@@ -34,11 +35,7 @@ class HomePage extends Component{
     let playlistName = this.props.checkedTags.join(", ");
 
     //fetching the songs to add to playlist based on selected tags
-    let selected_songs = this.props.songs.filter(song => {
-      return song.tags.some(tag => {
-        return this.props.checkedTags.includes(tag);
-      })
-    });
+    let selected_songs = getToggledSongs(this.props.songs, this.props.checkedTags, this.state.andOrToggle);
 
     Meteor.call("createPlaylist", playlistName, selected_songs, (err, response) => {
       if (err) {

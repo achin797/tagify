@@ -1,5 +1,5 @@
-export function getToggledSongs(songs, checkedTags, andToggle) {
-  return checkedTags.length === 0
+export function getToggledSongs(songs, checkedTags, andToggle, filterText="") {
+  let filteredSongs = checkedTags.length === 0
     ? songs
     : songs.filter(song => {
       if (andToggle) {
@@ -13,4 +13,12 @@ export function getToggledSongs(songs, checkedTags, andToggle) {
         })
       }
     });
+  //TODO: Change filter for artist
+  filteredSongs = filteredSongs.filter(song => {
+    return (song.title.toLowerCase().includes(filterText) ||
+      (song.album.toLowerCase().includes(filterText)) ||
+      (song.artists.toString().toLowerCase().includes(filterText)))
+  });
+
+  return filteredSongs;
 }

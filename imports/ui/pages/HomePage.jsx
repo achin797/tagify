@@ -2,10 +2,11 @@ import React, {Component} from 'react';
 import Layout from 'antd/lib/layout';
 import Divider from 'antd/lib/divider';
 import Typography from 'antd/lib/typography';
+import Button from "antd/lib/button";
+import Input from "antd/lib/input";
 import Navbar from '../components/Navbar';
 import TagsPanel from '../components/TagsPanel';
 import SongList from '../components/SongList';
-import {Button} from "antd";
 import {connect} from "react-redux";
 import {getTagsFailure, getTagsRequest, getTagsSuccess} from "../actions";
 import notification from "antd/lib/notification";
@@ -18,7 +19,7 @@ class HomePage extends Component{
 
   constructor(props) {
     super(props);
-    this.state = {andOrToggle: false};
+    this.state = {andOrToggle: false, filterText: ""};
   }
 
   componentDidMount() {
@@ -30,6 +31,13 @@ class HomePage extends Component{
       andOrToggle: !this.state.andOrToggle
     })
   }
+
+  updateFilter(filter) {
+    this.setState({
+      filterText: filter
+    })
+  }
+
 
   createPlaylist(){
     let playlistName = this.props.checkedTags.join(", ");
@@ -75,7 +83,11 @@ class HomePage extends Component{
                             onChange={() => this.flipToggle()}
                             />
                         </Title>
-                        <SongList andToggle={this.state.andOrToggle}/>
+                        <Input placeholder="Filter" allowClear onChange={event => {
+                          this.updateFilter(event.target.value.toLowerCase());
+                        }}
+                        />
+                        <SongList andToggle={this.state.andOrToggle} filterText={this.state.filterText}/>
                     </Layout>
                 </Layout>
             </div>

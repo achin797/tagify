@@ -119,6 +119,25 @@ body {
   }
 }
 
+.ant-input {
+  background-color: inherit;
+  border: none;
+  color: white;
+
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.ant-input-clear-icon {
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 120%;
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.5);
+  }
+}
+
 .ant-notification-notice {
   background-color: #2e2e2e;
   color: white;
@@ -214,7 +233,14 @@ body {
         border-top: 0;
       }
 
-      & > h1 { color: white; }
+      & > h1 {
+        color: white;
+        margin-bottom: 0px;
+
+        & > .and-or-toggle {
+          margin: 2%;
+        }
+      }
     }
   }
 }

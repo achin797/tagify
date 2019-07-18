@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import List from 'antd/lib/list';
 import TaggableSong from './TaggableSong';
 import {loadSongs} from "../actions";
+import {getToggledSongs} from "../utils/helpers";
 
 class SongList extends Component{
   constructor(props){
@@ -23,13 +24,7 @@ class SongList extends Component{
   }
 
   render(){
-    const dataSource = this.props.checkedTags.length === 0
-      ? this.props.songs
-      : this.props.songs.filter(song => {
-        return song.tags.some(tag => {
-          return this.props.checkedTags.includes(tag);
-        })
-      });
+    const dataSource = getToggledSongs(this.props.songs, this.props.checkedTags, this.props.andToggle, this.props.filterText);
 
     return (
       <div id="song-list">

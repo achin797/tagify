@@ -53,7 +53,6 @@ class TagsPanel extends Component {
       inputVisible,
       isInputDisabled,
       displayName,
-      userSpotifyId,
       deleteTag,
       showInput,
       handleChange,
@@ -63,7 +62,6 @@ class TagsPanel extends Component {
     return (
       <div id="tags-panel">
         {editable && tags.map((tag, index) => {
-          console.log(tag);
           return (
             <span key={index}>
               <Tag closable onClose={e => deleteTag(tag.id, e)}>

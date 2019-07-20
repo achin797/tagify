@@ -64,7 +64,6 @@ Meteor.methods({
         Meteor.users.update({ "_id": userId}, 
                           {$set: {"taggedSongs": filteredArray}}
                           );
-                          console.log("2");
       }
     }
   }

@@ -101,7 +101,43 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, {
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addTagToSong: (songId, tagId) => {
+      dispatch(addTagToSong(songId, tagId));
+      Meteor.call('addSongTag', Meteor.userId(), tagId, songId, (err, response) => {
+        if (err) {
+          dispatch(createTagFailure());
+          notification.error({
+            message: 'Create Tag Failed',
+            description: 'Tag could not be created. Please try again.'
+          });
+        } else {
+          dispatch(createTagSuccess(response));
+        }
+      });
+    },
+    removeTagFromSong: (songId, tagId) => {
+      e.preventDefault();
+      dispatch(removeTagFromSong(songId, tagId));
+      Meteor.call('deleteTag', Meteor.userId(), tagId, songId, err => {
+        if (err) {
+          dispatch(deleteTagFailure());
+          notification.error({
+            message: 'Delete Tag Failed',
+            description: 'Tag could not be deleted. Please reload the page.',
+          });
+        } else {
+          dispatch(deleteTagSuccess());
+        }
+      });
+    },
+  };
+};
+
+
+export default connect(mapStateToProps,  {
   addTagToSong,
   removeTagFromSong
-})(TaggableSong);
+}, mapDispatchToProps )(TaggableSong);

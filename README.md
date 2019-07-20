@@ -1,4 +1,6 @@
 # Tagify
+Tagify allows users to associate unique strings (“tags”) with their songs. Different combinations of tags can be used to filter the music library and create playlists.
+
 
 Group: Austin Kvaale n0a2b, Mingyu Gao f5k0b, Achintya Chandwani g9i0b
 

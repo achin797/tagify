@@ -1,13 +1,22 @@
 import { combineReducers } from 'redux';
 
-function* idGenerator() {
-  let id = 1;
-  while (true) {
-    yield id++;
+const navbarReducer = (
+  state = {
+    userDisplayName: '',
+    userAvatarUrl: ''
+  },
+  action
+) => {
+  switch (action.type) {
+    case 'GET_USER_SUCCESS':
+      return {
+        ...state,
+        ...action.payload
+      };
+    default:
+      return state;
   }
-}
-
-const songs = [];
+};
 
 const tagsPanelReducer = (
   state = {
@@ -110,7 +119,7 @@ const tagsReducer = (
 const songsReducer = (
   state = {
     hasLoaded: false,
-    songs
+    songs: []
   },
   action
 ) => {
@@ -165,8 +174,18 @@ const songsReducer = (
   }
 };
 
-export default combineReducers({
+const appReducer = combineReducers({
+  navbar: navbarReducer,
   tagsPanel: tagsPanelReducer,
   tags: tagsReducer,
   songs: songsReducer
 });
+
+const rootReducer = (state, action) => {
+  if (action === 'SIGN_OUT') {
+    state = undefined;
+  }
+  return appReducer(state, action);
+};
+
+export default rootReducer;

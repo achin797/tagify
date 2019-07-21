@@ -80,31 +80,7 @@ Meteor.methods({
                         return false;
                     }})[0].tags;
 
-                tagDisplayNames = [];
-
-                console.log(track.track.id)
-                console.log(tagIdArray);
-
-                console.log(0);
-                for(tagId of tagIdArray){
-                    var currDisplay = Meteor.users.findOne( userId ).tags;
-                    console.log(tagId);
-                    console.log(currDisplay);
-                    const filteredArray = currDisplay.filter(tag => {
-                        if (tag.id === tagId) {
-                            return true;
-                        } else{
-                            return false
-                        };
-                    }); 
-                    console.log(0101010);
-                    console.log(filteredArray);
-                    tagDisplayNames.push(filteredArray[0]); 
-                }
-                console.log(tagDisplayNames);
-                console.log(1);
-
-                updated_track['tags'] = tagDisplayNames;
+                updated_track['tags'] = tagIdArray;
                 
             }
 

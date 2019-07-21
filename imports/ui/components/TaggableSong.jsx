@@ -63,7 +63,7 @@ class TaggableSong extends Component {
         ))}
       </Menu>
     );
-
+        
     return (
       <Dropdown
         overlay={menu}
@@ -83,9 +83,13 @@ class TaggableSong extends Component {
           </div>
           <div>
             {song.tags.map((tagId, index) => {
-              const displayName = tags
-                .filter(t => t.id === tagId)
-                .displayName;
+              var displayName = tags
+                .filter(t => t.id === tagId);
+              if (displayName.length > 0){
+                displayName = displayName[0].displayName;
+              } else{
+                displayName = "";
+              }
               return <Tag key={index}>{displayName}</Tag>;
             })}
           </div>

@@ -136,6 +136,16 @@ const songsReducer = (
             : song;
         })
       };
+    case 'ADD_TAG_FAILURE':
+      return {
+        ...state,
+        isInputDisabled: false
+      };
+    case 'REMOVE_TAG_FAILURE':
+    return {
+      ...state,
+      isInputDisabled: false
+    };
     case 'REMOVE_TAG_FROM_SONG':
       return {
         ...state,

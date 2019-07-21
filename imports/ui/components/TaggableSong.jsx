@@ -6,7 +6,9 @@ import List from 'antd/lib/list';
 import Tag from 'antd/lib/tag';
 import {
   addTagToSong,
-  removeTagFromSong
+  removeTagFromSong,
+  addTagFailure,
+  removeTagFailure
 } from '../actions';
 
 class TaggableSong extends Component {
@@ -109,30 +111,28 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     addTagToSong: (songId, tagId) => {
-      dispatch(addTagToSong(songId, tagId));
       Meteor.call('addSongTag', Meteor.userId(), tagId, songId, (err, response) => {
         if (err) {
-          // dispatch(createTagFailure());
+          dispatch(addTagFailure());
           notification.error({
             message: 'Add Tag Failed',
             description: 'Tag could not be added to song. Please try again.'
           });
         } else {
-          // dispatch(createTagSuccess(response));
+          dispatch(addTagToSong(response.songId, response.tagId));
         }
       });
     },
     removeTagFromSong: (songId, tagId) => {
-      dispatch(removeTagFromSong(songId, tagId));
-      Meteor.call('removeSongTag', Meteor.userId(), tagId, songId, err => {
+      Meteor.call('removeSongTag', Meteor.userId(), tagId, songId, (err, response) => {
         if (err) {
-          // dispatch(deleteTagFailure());
+          dispatch(removeTagFailure());
           notification.error({
-            message: 'Delete Tag Failed',
-            description: 'Tag could not be deleted. Please reload the page.',
+            message: 'Remove Tag Failed',
+            description: 'Tag could not be removed. Please reload the page.',
           });
         } else {
-          // dispatch(deleteTagSuccess());
+          dispatch(removeTagFromSong(response.songId, response.tagId));
         }
       });
     },

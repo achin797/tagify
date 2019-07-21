@@ -1,7 +1,6 @@
 Meteor.methods({
   getUserTags: userId => {
     const user = Meteor.users.findOne(userId);
-    console.log(user.taggedSongs);
     if (user.tags === undefined) {
       Meteor.users.update(userId, {
         $set: { tags: [], taggedSongs: [] }
@@ -37,6 +36,7 @@ Meteor.methods({
           { $push: { taggedSongs: { id: songId, tags : [tagId] } }
             });
         }
+      return {songId: songId, tagId: tagId};
     },
 
   removeSongTag: (userId, tagId, songId) => {
@@ -47,16 +47,14 @@ Meteor.methods({
                           {$pull: { "taggedSongs.$.tags": tagId }
                           });
 
-      // // *** Check if song tags are empty ***   
+      // // *** Check if song tags are empty. If so, delete the empty array. ***   
       const currUser = Meteor.users.findOne(userId);
-      
       const filteredArray = currUser.taggedSongs.filter(song => {
         if (song.id === songId) {
           if (song.tags.length === 0) {
             return false;
           }
-        }
-        return true;
+        } return true;
       });      
 
       if (currUser.taggedSongs != filteredArray){
@@ -65,7 +63,6 @@ Meteor.methods({
                           );
       }
     }
+    return {songId: songId, tagId: tagId};
   }
-
-
 });

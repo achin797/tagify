@@ -165,8 +165,27 @@ const songsReducer = (
   }
 };
 
+const userReducer = (
+  state = {
+    userSpotifyId: 1
+  },
+  action
+) => {
+  switch (action.type) {
+    case 'SIGN_IN_SUCCESS':
+      return {
+        ...state,
+        userSpotifyId: 1
+        // action.payload
+      };
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   tagsPanel: tagsPanelReducer,
   tags: tagsReducer,
-  songs: songsReducer
+  songs: songsReducer,
+  user: userReducer
 });

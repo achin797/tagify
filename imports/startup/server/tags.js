@@ -1,6 +1,7 @@
 Meteor.methods({
   getUserTags: userId => {
     const user = Meteor.users.findOne(userId);
+    console.log(user.taggedSongs);
     if (user.tags === undefined) {
       Meteor.users.update(userId, {
         $set: { tags: [], taggedSongs: [] }

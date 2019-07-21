@@ -45,7 +45,7 @@ Meteor.methods({
         return response.data.body;
     },
 
-    getSavedTracks: function() {
+    getSavedTracks: userId => {
         var spotifyApi = new SpotifyWebApi();
 
         var offset = 0;
@@ -70,6 +70,43 @@ Meteor.methods({
             updated_track['artists'] = track.track.artists.map(artist => {return artist.name;});
             updated_track['album'] = track.track.album.name;
             updated_track['tags'] = [];
+
+            if(Meteor.users.findOne({"_id": userId, "taggedSongs.id": track.track.id })){
+                tagIdArray = Meteor.users.findOne({"_id": userId, "taggedSongs.id": track.track.id }).taggedSongs;
+                tagIdArray = tagIdArray.filter( song => { 
+                    if (song.id === track.track.id){
+                        return true;                    
+                    } else{
+                        return false;
+                    }})[0].tags;
+
+                tagDisplayNames = [];
+
+                console.log(track.track.id)
+                console.log(tagIdArray);
+
+                console.log(0);
+                for(tagId of tagIdArray){
+                    var currDisplay = Meteor.users.findOne( userId ).tags;
+                    console.log(tagId);
+                    console.log(currDisplay);
+                    const filteredArray = currDisplay.filter(tag => {
+                        if (tag.id === tagId) {
+                            return true;
+                        } else{
+                            return false
+                        };
+                    }); 
+                    console.log(0101010);
+                    console.log(filteredArray);
+                    tagDisplayNames.push(filteredArray[0]); 
+                }
+                console.log(tagDisplayNames);
+                console.log(1);
+
+                updated_track['tags'] = tagDisplayNames;
+                
+            }
 
             return updated_track;
         });

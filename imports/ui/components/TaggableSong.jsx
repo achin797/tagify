@@ -84,7 +84,7 @@ class TaggableSong extends Component {
           <div>
             {song.tags.map((tagId, index) => {
               const displayName = tags
-                .filter(t => t.id === tagId)[0]
+                .filter(t => t.id === tagId)
                 .displayName;
               return <Tag key={index}>{displayName}</Tag>;
             })}
@@ -101,7 +101,39 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, {
-  addTagToSong,
-  removeTagFromSong
-})(TaggableSong);
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addTagToSong: (songId, tagId) => {
+      dispatch(addTagToSong(songId, tagId));
+      Meteor.call('addSongTag', Meteor.userId(), tagId, songId, (err, response) => {
+        if (err) {
+          // dispatch(createTagFailure());
+          notification.error({
+            message: 'Add Tag Failed',
+            description: 'Tag could not be added to song. Please try again.'
+          });
+        } else {
+          // dispatch(createTagSuccess(response));
+        }
+      });
+    },
+    removeTagFromSong: (songId, tagId) => {
+      dispatch(removeTagFromSong(songId, tagId));
+      Meteor.call('removeSongTag', Meteor.userId(), tagId, songId, err => {
+        if (err) {
+          // dispatch(deleteTagFailure());
+          notification.error({
+            message: 'Delete Tag Failed',
+            description: 'Tag could not be deleted. Please reload the page.',
+          });
+        } else {
+          // dispatch(deleteTagSuccess());
+        }
+      });
+    },
+  };
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaggableSong);

@@ -1,4 +1,11 @@
 Meteor.methods({
+  getUser: userId => {
+    const user = Meteor.users.findOne(userId);
+    return {
+      userDisplayName: user.profile.display_name,
+      userAvatarUrl: user.profile.images[0].url
+    };
+  },
     typeaheadTracks: function(query, options) {
         options = options || {};
 

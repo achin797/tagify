@@ -1,3 +1,28 @@
+export const getUserRequest = () => {
+  return {
+    type: 'GET_USER_REQUEST'
+  };
+};
+
+export const getUserSuccess = userInformation => {
+  return {
+    type: 'GET_USER_SUCCESS',
+    payload: userInformation
+  };
+};
+
+export const getUserFailure = () => {
+  return {
+    type: 'GET_USER_FAILURE'
+  };
+};
+
+export const signOut = () => {
+  return {
+    type: 'SIGN_OUT'
+  };
+};
+
 export const getTagsRequest = () => {
   return {
     type: 'GET_TAGS_REQUEST'

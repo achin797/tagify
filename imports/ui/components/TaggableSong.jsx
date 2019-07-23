@@ -6,7 +6,7 @@ import List from 'antd/lib/list';
 import Tag from 'antd/lib/tag';
 import {
   addTagToSong,
-  removeTagFromSong
+  removeTagFromSong,
 } from '../actions';
 
 class TaggableSong extends Component {
@@ -63,7 +63,7 @@ class TaggableSong extends Component {
         ))}
       </Menu>
     );
-
+        
     return (
       <Dropdown
         overlay={menu}
@@ -83,9 +83,13 @@ class TaggableSong extends Component {
           </div>
           <div>
             {song.tags.map((tagId, index) => {
-              const displayName = tags
-                .filter(t => t.id === tagId)[0]
-                .displayName;
+              var displayName = tags
+                .filter(t => t.id === tagId);
+              if (displayName.length > 0){
+                displayName = displayName[0].displayName;
+              } else{
+                displayName = "";
+              }
               return <Tag key={index}>{displayName}</Tag>;
             })}
           </div>
@@ -101,7 +105,35 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, {
-  addTagToSong,
-  removeTagFromSong
-})(TaggableSong);
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addTagToSong: (songId, tagId) => {
+      Meteor.call('addSongTag', Meteor.userId(), tagId, songId, (err, response) => {
+        if (err) {
+          notification.error({
+            message: 'Add Tag Failed',
+            description: 'Tag could not be added to song. Please try again.'
+          });
+        } else {
+          dispatch(addTagToSong(response.songId, response.tagId));
+        }
+      });
+    },
+    removeTagFromSong: (songId, tagId) => {
+      Meteor.call('removeSongTag', Meteor.userId(), tagId, songId, (err, response) => {
+        if (err) {
+          notification.error({
+            message: 'Remove Tag Failed',
+            description: 'Tag could not be removed. Please reload the page.',
+          });
+        } else {
+          dispatch(removeTagFromSong(response.songId, response.tagId));
+        }
+      });
+    },
+  };
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaggableSong);

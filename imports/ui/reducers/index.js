@@ -174,11 +174,13 @@ const songsReducer = (
   }
 };
 
+
+
 const appReducer = combineReducers({
   navbar: navbarReducer,
   tagsPanel: tagsPanelReducer,
   tags: tagsReducer,
-  songs: songsReducer
+  songs: songsReducer,
 });
 
 const rootReducer = (state, action) => {

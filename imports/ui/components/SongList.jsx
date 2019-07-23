@@ -15,7 +15,7 @@ class SongList extends Component{
     //Use local state to avoid repeated api calls
 
     if(!this.props.hasLoaded) {
-      Meteor.call("getSavedTracks", (err, response) => {
+      Meteor.call("getSavedTracks", Meteor.userId(), (err, response) => {
           console.log("This message should only display on initial load");
           this.props.loadSongs(response);
         }

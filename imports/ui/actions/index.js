@@ -88,11 +88,6 @@ export const addTagToSong = (songId, tagId) => {
   };
 };
 
-export const addTagFailure = () => {
-  return {
-    type: 'ADD_TAG_FAILURE'
-  };
-};
 
 
 export const loadSongs = songs => {
@@ -106,11 +101,5 @@ export const removeTagFromSong = (songId, tagId) => {
   return {
     type: 'REMOVE_TAG_FROM_SONG',
     payload: { songId, tagId }
-  };
-};
-
-export const removeTagFailure = () => {
-  return {
-    type: 'REMOVE_TAG_FAILURE'
   };
 };

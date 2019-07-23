@@ -4,11 +4,6 @@ import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Typography from 'antd/lib/typography';
 import Button from 'antd/lib/button';
-import {
-  signInRequest,
-  signInSuccess,
-  signInFailure
-} from '../actions';
 
 const { Title, Paragraph } = Typography;
 

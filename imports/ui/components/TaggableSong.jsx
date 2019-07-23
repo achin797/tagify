@@ -7,8 +7,6 @@ import Tag from 'antd/lib/tag';
 import {
   addTagToSong,
   removeTagFromSong,
-  addTagFailure,
-  removeTagFailure
 } from '../actions';
 
 class TaggableSong extends Component {
@@ -113,7 +111,6 @@ const mapDispatchToProps = dispatch => {
     addTagToSong: (songId, tagId) => {
       Meteor.call('addSongTag', Meteor.userId(), tagId, songId, (err, response) => {
         if (err) {
-          dispatch(addTagFailure());
           notification.error({
             message: 'Add Tag Failed',
             description: 'Tag could not be added to song. Please try again.'
@@ -126,7 +123,6 @@ const mapDispatchToProps = dispatch => {
     removeTagFromSong: (songId, tagId) => {
       Meteor.call('removeSongTag', Meteor.userId(), tagId, songId, (err, response) => {
         if (err) {
-          dispatch(removeTagFailure());
           notification.error({
             message: 'Remove Tag Failed',
             description: 'Tag could not be removed. Please reload the page.',

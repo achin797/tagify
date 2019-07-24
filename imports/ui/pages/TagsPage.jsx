@@ -1,52 +1,62 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Navbar from '../components/Navbar';
 import Layout from 'antd/lib/layout';
-import List from 'antd/lib/list';
-import Button from 'antd/lib/button';
-import ModalCreateTag from '../components/ModalCreateTag';
+import Typography from 'antd/lib/typography';
+import notification from 'antd/lib/notification';
+import TagsPanel from '../components/TagsPanel';
 import {
-  deleteTag,
-  openModalCreateTag
+  getTagsRequest,
+  getTagsSuccess,
+  getTagsFailure
 } from '../actions';
 
-const TagsPage = ({
-  tags,
-  deleteTag,
-  openModalCreateTag
-}) => (
-  <div id="home-page">
-    <Layout>
-      <Navbar />
-      <Layout>
-        <List
-          bordered
-          dataSource={tags}
-          renderItem={item => (
-            <List.Item>
-              {item.displayName}
-              <Button
-                shape="circle"
-                size="small"
-                onClick={() => deleteTag(item.id)}
-              >X</Button>
-            </List.Item>
-          )}
-        />
-        <Button onClick={() => openModalCreateTag()}>Add new tag</Button>
-        <ModalCreateTag />
-      </Layout>
-    </Layout>
-  </div>
-);
+const { Title } = Typography;
+
+class TagsPage extends Component {
+  componentDidMount() {
+    this.props.getTags();
+  }
+
+  render() {
+    return (
+      <div id="tags-page">
+        <Layout>
+          <Navbar />
+          <Layout>
+            <Title>Tags</Title>
+            <TagsPanel editable />
+          </Layout>
+        </Layout>
+      </div>
+    );
+  }
+}
 
 const mapStateToProps = state => {
+  return {};
+};
+
+const mapDispatchToProps = dispatch => {
   return {
-    tags: state.tags.tags
+    getTags: () => {
+      dispatch(getTagsRequest());
+      Meteor.call('getUserTags', Meteor.userId(), (err, response) => {
+        if (err) {
+          dispatch(getTagsFailure());
+          notification.error({
+            message: 'Fetch Tags Failed',
+            description: 'Tags could not be fetched. Please reload the page.'
+          });
+        } else {
+          dispatch(getTagsSuccess(response));
+        }
+      });
+    }
   };
 };
 
-export default connect(mapStateToProps, {
-  deleteTag,
-  openModalCreateTag
-})(TagsPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TagsPage);

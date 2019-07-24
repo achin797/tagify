@@ -12,15 +12,142 @@ body {
   height: 100%;
 
   & > aside {
+    background-color: @background-navbar;
     height: 100%;
 
-    & .logo {
-      background-color: rgba(255, 255, 255, 0.2);
-      margin: 10px 10px 6px;
-      width: 180px;
-      height: 32px;
+    & > div {
+      & > div {
+        color: white;
+        margin: 10px 10px 6px;
+        width: 180px;
+        height: 32px;
+        cursor: pointer;
+
+        & > span:nth-of-type(2) { margin-left: 0.5rem; }
+      }
+
+      & > ul { background-color: @background-navbar; }
     }
   }
+}
+
+#tags-panel {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0.5rem 0 1rem;
+
+  span { margin-bottom: 0.5rem; }
+
+  span > .ant-tag, span > input {
+    background-color: @background-dark;
+    color: white;
+    height: 2rem;
+    line-height: 2rem;
+    font-size: 1rem;
+  }
+
+  span:last-of-type > .ant-tag {
+    border-style: dashed;
+
+    &:hover { cursor: pointer; }
+  }
+
+  span > .ant-tag {
+    &.ant-tag-checkable {
+      border-color: white;
+      cursor: pointer;
+
+      &:hover {
+        border-color: @primary-color;
+        color: @primary-color;
+      }
+
+      &.ant-tag-checkable-checked {
+        border-color: @primary-color;
+        background-color: @primary-color;
+        color: black;
+      }
+    }
+
+    & > i { color: white; }
+  }
+
+  span > input { width: 8rem; }
+}
+
+#song-list {
+  & li {
+    color: white;
+    cursor: pointer;
+
+    &:hover { background-color: @background-dark-hover; }
+
+    & > div { margin-left: 1rem; }
+
+    & > div:nth-of-type(1) { font-size: 1rem; }
+
+    & > div:nth-of-type(2) { color: @text-color-song-info; }
+
+    & > div:nth-of-type(3) {
+      margin-top: -0.3rem;
+
+      & > div.ant-tag {
+        background-color: inherit;
+        color: white;
+        cursor: pointer;
+        margin-top: 0.3rem;
+
+        &:hover { opacity: 1; }
+      }
+    }
+  }
+}
+
+.user-dropdown-menu, .add-tag-dropdown-menu {
+  min-width: unset !important;
+
+  & > ul {
+    background-color: #2e2e2e;
+
+    & > li {
+      color: white;
+
+      &.ant-dropdown-menu-item-selected {
+        background-color: #2e2e2e;
+        color: @primary-color;
+      }
+
+      &:hover { background-color: #3d3d3d; }
+    }
+  }
+}
+
+.ant-input {
+  background-color: inherit;
+  border: none;
+  color: white;
+
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.ant-input-clear-icon {
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 120%;
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+.ant-notification-notice {
+  background-color: #2e2e2e;
+  color: white;
+
+  & .ant-notification-notice-message { color: inherit; }
+
+  & .ant-notification-notice-close { color: inherit; }
 }
 
 #auth-page-sign-in {
@@ -54,13 +181,11 @@ body {
       position: absolute;
       left: 50%;
       bottom: 0;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -80%);
     }
   }
 
-  & > div:nth-of-type(2) {
-    padding: 5rem 5rem;
-  }
+  & > div:nth-of-type(2) { padding: 5rem 5rem; }
 
   & > div:nth-of-type(3) {
     background-color: @heading-color;
@@ -72,13 +197,9 @@ body {
     position: relative;
 
     & > div:nth-of-type(1).ant-row-flex > div.ant-col > div {
-      &:first-child {
-        color: grey;
-      }
+      &:first-child { color: grey; }
 
-      &:not(:last-child) {
-        margin-bottom: 0.5rem;
-      }
+      &:not(:last-child) { margin-bottom: 0.5rem; }
     }
 
     & > div:nth-of-type(2).ant-row-flex {
@@ -91,14 +212,10 @@ body {
           color: grey;
           font-size: 0.75rem;
 
-          &:not(:last-child) {
-            margin-right: 1rem;
-          }
+          &:not(:last-child) { margin-right: 1rem; }
         }
 
-        &.ant-col-5 {
-          text-align: right;
-        }
+        &.ant-col-5 { text-align: right; }
       }
     }
   }
@@ -109,6 +226,60 @@ body {
 
   & > section {
     height: inherit;
+
+    & > section {
+      background-color: @background-dark;
+      padding: 1rem 10rem;
+
+      & > div.ant-divider {
+        background-color: @text-color-song-info;
+        border-top: 0;
+      }
+
+      & > h1 {
+        color: white;
+        margin-bottom: 0px;
+
+        & > .and-or-toggle {
+          margin: 2%;
+        }
+      }
+    }
+  }
+}
+
+#tags-page {
+  height: 100vh;
+
+  & > section {
+    height: inherit;
+
+    & > section {
+      background-color: @background-dark;
+      padding: 1rem 10rem;
+
+      & > h1 { color: white; }
+    }
+  }
+}
+
+#playlists-page {
+  height: 100vh;
+
+  & > section {
+    height: inherit;
+
+    & > section {
+      background-color: @background-dark;
+      padding: 1rem 10rem;
+
+      & > div.ant-divider {
+        background-color: @text-color-song-info;
+        border-top: 0;
+      }
+
+      & > h1 { color: white; }
+    }
   }
 }
 

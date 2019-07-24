@@ -5,7 +5,7 @@ Group: Austin Kvaale n0a2b, Mingyu Gao f5k0b, Achintya Chandwani g9i0b
 Tagify is for Spotify users who find that playlists are too messy and take too many clicks.
 
 ### What does Tagify do?
-Tagify allows users to add **tags** to songs. Tags are strings and are created by the user. The main goal is to make creating play queues and playlists easier.
+Tagify is a third party web-app that allows a user to **tag** songs in his/her Spotify library. The user can then create dynamic playlists based on those tags. 
 
 ### What type of data does Tagify store?
 The application will associate various song metadata with unique strings (i.e. "tags"). Users will create these tags and connect the chosen song, or set of songs, to the tag. Songs themselves will not be stored; rather, we will refer to the Spotify song data.

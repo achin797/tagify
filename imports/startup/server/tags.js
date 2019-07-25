@@ -6,7 +6,7 @@ Meteor.methods({
         $set: { tags: [], taggedSongs: [] }
       });
     }
-    return user.tags;
+    return user.tags || [];
   },
   createTag: (userId, displayName) => {
     const tag = {

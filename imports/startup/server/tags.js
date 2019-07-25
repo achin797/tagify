@@ -6,7 +6,7 @@ Meteor.methods({
         $set: { tags: [], taggedSongs: [] }
       });
     }
-    return user.tags;
+    return user.tags || [];
   },
   createTag: (userId, displayName) => {
     const tag = {
@@ -22,6 +22,9 @@ Meteor.methods({
     Meteor.users.update(userId, {
       $pull: { tags: { id: tagId } }
     });
+    Meteor.users.update(userId, {
+      $pull: { taggedSongs: { tags: tagId}}
+    })
   },
 
 

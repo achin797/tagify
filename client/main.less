@@ -297,6 +297,21 @@ body {
   }
 }
 
+#search-page {
+  height: 100vh;
+
+  & > section {
+    height: inherit;
+
+    & > section {
+      background-color: @background-dark;
+      padding: 1rem 10rem;
+
+      & > h1 { color: white; }
+    }
+  }
+}
+
 #not-found-page {
   background-color: @secondary-color;
   height: 100vh;

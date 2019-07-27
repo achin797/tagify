@@ -75,6 +75,12 @@ class Navbar extends Component {
                 <span>Playlists</span>
               </Link>
             </Menu.Item>
+            <Menu.Item key="3">
+              <Link to="/search">
+                <Icon type="search" />
+                <span>Search</span>
+              </Link>
+            </Menu.Item>
           </Menu>
         </Sider>
       </div>

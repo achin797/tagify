@@ -6,23 +6,15 @@ Meteor.methods({
       userAvatarUrl: user.profile.images[0].url
     };
   },
-    typeaheadTracks: function(query, options) {
-        options = options || {};
-
-        // guard against client-side DOS: hard limit to 50
-        if (options.limit) {
-            options.limit = Math.min(6, Math.abs(options.limit));
-        } else {
-            options.limit = 6;
-        }
+    searchTracks: function(query) {
 
         // Spotify call.
         var spotifyApi = new SpotifyWebApi();
-        var response = spotifyApi.searchTracks(query, { limit: options.limit });
+        var response = spotifyApi.searchTracks(query, { limit: 50 });
 
         // Need to refresh token
         if (checkTokenRefreshed(response, spotifyApi)) {
-            response = spotifyApi.searchTracks(query, { limit: options.limit });
+            response = spotifyApi.searchTracks(query, { limit: 50 });
         }
 
         return response.data.body.tracks.items;

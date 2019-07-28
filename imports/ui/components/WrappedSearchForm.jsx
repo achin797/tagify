@@ -15,7 +15,7 @@ class SearchForm extends Component {
     const artistError = isFieldTouched('artist') && getFieldError('artist');
     const albumError = isFieldTouched('album') && getFieldError('album');
     return (
-      <Form layout="inline" onSubmit={this.handleSubmit}>
+      <Form layout="inline" onSubmit={this.findSongs}>
         <Form.Item validateStatus={titleError ? 'error' : ''} help={titleError || ''}>
           {getFieldDecorator('title', {
             rules: [{ required: true, message: 'Please input the title!' }],

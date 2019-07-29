@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Layout from 'antd/lib/layout';
+import Checkbox from 'antd/lib/checkbox';
 import Divider from 'antd/lib/divider';
 import Typography from 'antd/lib/typography';
 import Button from "antd/lib/button";
@@ -26,9 +27,9 @@ class HomePage extends Component{
     this.props.getTags();
   }
 
-  flipToggle(){
+  flipToggle(e) {
     this.setState({
-      andOrToggle: !this.state.andOrToggle
+      andOrToggle: e.target.checked
     })
   }
 
@@ -66,23 +67,19 @@ class HomePage extends Component{
                     <Layout>
                         <span>
                           <TagsPanel />
+                          <div>
+                            <Checkbox onChange={e => this.flipToggle(e)} />&nbsp;include all
+                          </div>
                           <Button
                             className="generate-playlist-button"
                             type="primary"
                             disabled={this.props.checkedTags.length === 0}
                             onClick={() => this.createPlaylist()}>
-                            generate playlist
+                            Generate Playlist
                           </Button>
                         </span>
                         <Divider />
-                        <Title>Liked Songs
-                          <Switch
-                            className="and-or-toggle"
-                            checkedChildren="AND"
-                            unCheckedChildren="OR"
-                            onChange={() => this.flipToggle()}
-                            />
-                        </Title>
+                        <Title>Liked Songs</Title>
                         <Input placeholder="Filter" allowClear onChange={event => {
                           this.updateFilter(event.target.value.toLowerCase());
                         }}

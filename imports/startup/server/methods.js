@@ -109,7 +109,31 @@ Meteor.methods({
         return playlists;
     }
 
-    return response.data.body.tracks.items;
+    var tracks = response.data.body.tracks.items;
+
+    if (tracks.length === 0){
+      throw Meteor.Error("Could not find any tracks with the following search parameters")
+    }
+
+    try{
+      var updatedTracks = tracks.map(track => {
+        var updated_track = {};
+        updated_track['title'] = track.name;
+        updated_track['id'] = track.id;
+        updated_track['artists'] = track.artists.map(artist => {
+          return artist.name;
+        });
+        updated_track['album'] = track.album.name;
+        updated_track['tags'] = [];
+
+        return updated_track;
+      });
+
+      return updatedTracks;
+    }
+    catch (err) {
+      throw new Meteor.Error(err.toString());
+    }
   },
 
   //TODO: Add error case handling and better playlist naming
@@ -168,11 +192,7 @@ Meteor.methods({
       var currUserDb = Meteor.users.findOne({"_id": userId, "taggedSongs.id": track.track.id});
       if (currUserDb) {
         tagIdArray = currUserDb.taggedSongs.filter(song => {
-          if (song.id === track.track.id) {
-            return true;
-          } else {
-            return false;
-          }
+          return song.id === track.track.id;
         })[0].tags;
         updated_track['tags'] = tagIdArray;
       }

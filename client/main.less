@@ -34,7 +34,7 @@ body {
 #tags-panel {
   display: flex;
   flex-wrap: wrap;
-  margin: 0.5rem 0 1rem;
+  margin: 0.5rem 0 0;
 
   span { margin-bottom: 0.5rem; }
 
@@ -119,25 +119,6 @@ body {
 
       &:hover { background-color: #3d3d3d; }
     }
-  }
-}
-
-.ant-input {
-  background-color: inherit;
-  border: none;
-  color: white;
-
-  &:focus {
-    box-shadow: none;
-  }
-}
-
-.ant-input-clear-icon {
-  color: rgba(255, 255, 255, 0.25);
-  font-size: 120%;
-
-  &:hover {
-    color: rgba(255, 255, 255, 0.5);
   }
 }
 
@@ -231,17 +212,43 @@ body {
       background-color: @background-dark;
       padding: 1rem 10rem;
 
+      & > span {
+        & > div:nth-of-type(1) { margin-bottom: 0.5rem; }
+        & > div:nth-of-type(2) {
+          color: white;
+          margin-bottom: 0.5rem;
+        }
+        & > button { margin-bottom: 0.5rem; }
+      }
+
       & > div.ant-divider {
         background-color: @text-color-song-info;
         border-top: 0;
+        min-height: 1px;
       }
 
-      & > h1 {
-        color: white;
-        margin-bottom: 0px;
+      & > h1 { color: white; }
 
-        & > .and-or-toggle {
-          margin: 2%;
+      & > span.ant-input-affix-wrapper {
+        margin: -0.5rem 0 0.3rem;
+
+        & input.ant-input {
+          background-color: inherit;
+          border: none;
+          color: white;
+
+          &:focus {
+            box-shadow: none;
+          }
+        }
+
+        & i.ant-input-clear-icon {
+          color: rgba(255, 255, 255, 0.25);
+          font-size: 120%;
+
+          &:hover {
+            color: rgba(255, 255, 255, 0.5);
+          }
         }
       }
     }
@@ -276,6 +283,7 @@ body {
       & > div.ant-divider {
         background-color: @text-color-song-info;
         border-top: 0;
+        min-height: 1px;
       }
 
       & > h1 { color: white; }

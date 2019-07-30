@@ -128,6 +128,10 @@ export const loadSongs = songs => {
 };
 
 export const loadPlaylists = playlists => {
+<<<<<<< HEAD
+=======
+  console.log(playlists);
+>>>>>>> Playlist page progress
   return {
       type: 'LOAD_PLAYLISTS',
       payload: playlists,

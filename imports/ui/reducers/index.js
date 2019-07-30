@@ -116,6 +116,27 @@ const tagsReducer = (
   }
 };
 
+const playlistsReducer = (
+  state = {
+    hasLoaded: false,
+    playlists: []
+  },
+  action
+) => {
+  switch (action.type){
+    case 'LOAD_PLAYLISTS':
+      console.log(action.payload);
+      return{
+        ...state,
+        hasLoaded: true,
+        playlists: action.payload
+      };
+      default:
+          return state;
+  }
+  
+};
+
 const songsReducer = (
   state = {
     hasLoaded: false,
@@ -181,6 +202,7 @@ const appReducer = combineReducers({
   tagsPanel: tagsPanelReducer,
   tags: tagsReducer,
   songs: songsReducer,
+  playlists: playlistsReducer
 });
 
 const rootReducer = (state, action) => {

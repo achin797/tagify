@@ -122,6 +122,14 @@ export const loadSongs = songs => {
     };
 };
 
+export const loadPlaylists = playlists => {
+  console.log(playlists);
+  return {
+      type: 'LOAD_PLAYLISTS',
+      payload: playlists,
+  };
+};
+
 export const removeTagFromSong = (songId, tagId) => {
   return {
     type: 'REMOVE_TAG_FROM_SONG',

@@ -105,7 +105,6 @@ Meteor.methods({
         // then we update the offset and make another call while there are items to fetch
         do {
             var response = spotifyApi.getUserPlaylists(Meteor.user().services.spotify.id, {offset: offset});
-
             if (checkTokenRefreshed(response, spotifyApi)) {
                 response = spotifyApi.getUserPlaylists(Meteor.user().services.spotify.id, {offset: offset});
             }
@@ -115,8 +114,17 @@ Meteor.methods({
         } while(response.data.body.next!=null);
 
         return playlists;
-    }
+    },
+
+    getPlaylistTracks: playlistID => {
+        var spotifyApi = new SpotifyWebApi();
+        let retVal = spotifyApi.getPlaylistTracks(Meteor.user().services.spotify.id, playlistID); 
+        console.log(retVal);
+        return retVal;
+    } 
+
 });
+
 
 var checkTokenRefreshed = function(response, api) {
     if (response.error && response.error.statusCode === 401) {

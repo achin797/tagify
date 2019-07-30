@@ -20,5 +20,23 @@ export function getToggledSongs(songs, checkedTags, andToggle, filterText="") {
       (song.artists.toString().toLowerCase().includes(filterText)))
   });
 
+  console.log(filteredSongs);
+
   return filteredSongs;
+}
+
+
+export function getPlaylists(playlists) {
+  console.log(playlists)
+  let filteredPlaylist = [];
+  for(x in playlists){
+    let tracks = []
+    Meteor.call("getPlaylistTracks", (err, response) => {
+      tracks = response; });
+    console.log(tracks);
+    var playlistInfo = {"name": playlists[x].name, "tracks": playlists[x].tracks};
+    filteredPlaylist.push(playlistInfo)
+  }
+  console.log(filteredPlaylist);
+  return filteredPlaylist;
 }

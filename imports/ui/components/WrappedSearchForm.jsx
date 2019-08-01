@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Input, Button } from 'antd';
+import Icon from "antd/lib/icon";
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -7,39 +8,36 @@ function hasErrors(fieldsError) {
 
 class SearchForm extends Component {
 
+  findSongs = e => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+        Meteor.call("searchTracks", (values.title), (err, response) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(response);
+          }
+        })
+      }
+    });
+  };
+
   render() {
     const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
 
     // Only show error after a field is touched.
     const titleError = isFieldTouched('title') && getFieldError('title');
-    const artistError = isFieldTouched('artist') && getFieldError('artist');
-    const albumError = isFieldTouched('album') && getFieldError('album');
     return (
       <Form layout="inline" onSubmit={this.findSongs}>
         <Form.Item validateStatus={titleError ? 'error' : ''} help={titleError || ''}>
-          {getFieldDecorator('title', {
+          {getFieldDecorator('search', {
             rules: [{ required: true, message: 'Please input the title!' }],
           })(
             <Input
-              placeholder="Title"
-            />,
-          )}
-        </Form.Item>
-        <Form.Item validateStatus={artistError ? 'error' : ''} help={artistError || ''}>
-          {getFieldDecorator('artist', {
-            rules: [{ required: true, message: 'Please input the artist!' }],
-          })(
-            <Input
-              placeholder="Artist"
-            />,
-          )}
-        </Form.Item>
-        <Form.Item validateStatus={albumError ? 'error' : ''} help={albumError || ''}>
-          {getFieldDecorator('album', {
-            rules: [{ required: true, message: 'Please input the album!' }],
-          })(
-            <Input
-              placeholder="Album"
+              prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              placeholder="Search"
             />,
           )}
         </Form.Item>

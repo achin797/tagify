@@ -122,6 +122,13 @@ export const loadSongs = songs => {
     };
 };
 
+export const populateSearchResults = songs => {
+  return {
+    type: 'POPULATE_SEARCH_RESULTS',
+    payload: songs,
+  };
+};
+
 export const removeTagFromSong = (songId, tagId) => {
   return {
     type: 'REMOVE_TAG_FROM_SONG',

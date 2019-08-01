@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import Layout from 'antd/lib/layout';
 import Typography from 'antd/lib/typography';
 import notification from 'antd/lib/notification';
-import {WrappedSearchForm} from "../components/WrappedSearchForm";
+import WrappedSearchForm from "../components/WrappedSearchForm";
 import TagsPanel from "../components/TagsPanel";
 import {
   getTagsRequest,

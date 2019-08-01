@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Form, Input, Button } from 'antd';
 import Icon from "antd/lib/icon";
+import {populateSearchResults} from "../actions";
+import {connect} from "react-redux";
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -12,12 +14,12 @@ class SearchForm extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
-        Meteor.call("searchTracks", (values.title), (err, response) => {
+        Meteor.call("searchTracks", (values.search), (err, response) => {
           if (err) {
-            console.log(err);
+            console.log(err.toString());
           } else {
-            console.log(response);
+            this.props.populateSearchResults(response);
+            console.log(this.props.searchResults);
           }
         })
       }
@@ -51,4 +53,14 @@ class SearchForm extends Component {
   }
 }
 
-export const WrappedSearchForm = Form.create({ name: 'horizontal_login' })(SearchForm);
+const mapStateToProps = state => {
+  return {
+    searchResults: state.searchResults.songs,
+    hasLoaded: state.searchResults.hasLoaded,
+    checkedTags: state.tagsPanel.checkedTags
+  };
+};
+
+const WrappedSearchForm = connect(mapStateToProps, {populateSearchResults})(Form.create({ name: 'horizontal_login' })(SearchForm));
+
+export default WrappedSearchForm;

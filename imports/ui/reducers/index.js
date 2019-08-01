@@ -174,6 +174,64 @@ const songsReducer = (
   }
 };
 
+const searchResultsReducer = (
+  state = {
+    hasLoaded: false,
+    songs: []
+  },
+  action
+) => {
+  switch (action.type) {
+    case 'POPULATE_SEARCH_RESULTS':
+      return {
+        ...state,
+        hasLoaded: true,
+        songs: action.payload
+      };
+    case 'ADD_TAG_TO_SONG':
+      return {
+        ...state,
+        songs: state.songs.map(song => {
+          return song.id === action.payload.songId
+            ? {
+              ...song,
+              tags: [
+                ...song.tags,
+                action.payload.tagId
+              ]
+            }
+            : song;
+        })
+      };
+    case 'REMOVE_TAG_FROM_SONG':
+      return {
+        ...state,
+        songs: state.songs.map(song => {
+          return song.id === action.payload.songId
+            ? {
+              ...song,
+              tags: song.tags.filter(id => {
+                return id !== action.payload.tagId;
+              })
+            }
+            : song;
+        })
+      };
+    case 'DELETE_TAG_REQUEST':
+      return {
+        ...state,
+        songs: state.songs.map(song => {
+          return {
+            ...song,
+            tags: song.tags.filter(id => id !== action.payload)
+          };
+        })
+      };
+    default:
+      return state;
+  }
+};
+
 
 
 const appReducer = combineReducers({
@@ -181,6 +239,7 @@ const appReducer = combineReducers({
   tagsPanel: tagsPanelReducer,
   tags: tagsReducer,
   songs: songsReducer,
+  searchResults: searchResultsReducer,
 });
 
 const rootReducer = (state, action) => {

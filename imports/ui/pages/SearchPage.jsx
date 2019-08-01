@@ -11,6 +11,7 @@ import {
   getTagsSuccess,
   getTagsFailure
 } from '../actions';
+import SearchResults from "../components/SearchResults";
 
 const { Title } = Typography;
 
@@ -28,6 +29,7 @@ class SearchPage extends Component {
             <Title>Search</Title>
             <TagsPanel editable />
             <WrappedSearchForm />
+            <SearchResults/>
           </Layout>
         </Layout>
       </div>

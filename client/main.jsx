@@ -9,7 +9,7 @@ import { renderRoutes } from '../imports/startup/client/routes';
 
 Meteor.startup(() => {
   render(
-    <Provider store={createStore(reducers)}>
+    <Provider store={createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
       {renderRoutes()}
     </Provider>,
     document.getElementById('react-target')

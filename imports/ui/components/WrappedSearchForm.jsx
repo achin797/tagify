@@ -56,8 +56,6 @@ class SearchForm extends Component {
 const mapStateToProps = state => {
   return {
     searchResults: state.searchResults.songs,
-    hasLoaded: state.searchResults.hasLoaded,
-    checkedTags: state.tagsPanel.checkedTags
   };
 };
 

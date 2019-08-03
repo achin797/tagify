@@ -181,7 +181,7 @@ const songsReducer = (
 
 const searchResultsReducer = (
   state = {
-    hasLoaded: false,
+    initialSearchMade: false,
     songs: []
   },
   action
@@ -190,7 +190,7 @@ const searchResultsReducer = (
     case 'POPULATE_SEARCH_RESULTS':
       return {
         ...state,
-        hasLoaded: true,
+        initialSearchMade: true,
         songs: action.payload
       };
     case 'ADD_TAG_TO_SONG':

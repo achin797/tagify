@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import Navbar from '../components/Navbar';
 import Layout from 'antd/lib/layout';
 import Typography from 'antd/lib/typography';
@@ -13,7 +13,7 @@ import {
 } from '../actions';
 import SearchResults from "../components/SearchResults";
 
-const { Title } = Typography;
+const {Title} = Typography;
 
 class SearchPage extends Component {
   componentDidMount() {
@@ -21,24 +21,42 @@ class SearchPage extends Component {
   }
 
   render() {
-    return (
-      <div id="search-page">
-        <Layout>
-          <Navbar />
+
+    if (!this.props.initialSearchMade) {
+      return (
+        <div id="search-page">
           <Layout>
-            <Title>Search</Title>
-            <TagsPanel editable />
-            <WrappedSearchForm />
-            <SearchResults/>
+            <Navbar/>
+            <Layout>
+              <Title>Search</Title>
+              <TagsPanel editable/>
+              <WrappedSearchForm/>
+            </Layout>
           </Layout>
-        </Layout>
-      </div>
-    );
+        </div>
+      );
+    } else {
+      return (
+        <div id="search-page">
+          <Layout>
+            <Navbar/>
+            <Layout>
+              <Title>Search</Title>
+              <TagsPanel editable/>
+              <WrappedSearchForm/>
+              <SearchResults/>
+            </Layout>
+          </Layout>
+        </div>
+      );
+    }
   }
 }
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    initialSearchMade: state.searchResults.initialSearchMade,
+  };
 };
 
 const mapDispatchToProps = dispatch => {

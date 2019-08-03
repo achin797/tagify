@@ -16,7 +16,7 @@ class SearchResults extends Component{
         <List
           loading={!this.props.hasLoaded}
           dataSource={dataSource}
-          renderItem={song => <TaggableSong song={song} />}
+          renderItem={song => <TaggableSong song={song} isSearchedSong={true}/>}
         />
       </div>
     );

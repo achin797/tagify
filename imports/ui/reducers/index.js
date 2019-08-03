@@ -124,6 +124,11 @@ const songsReducer = (
   action
 ) => {
   switch (action.type) {
+    case 'ADD_SONG':
+    return {
+      ...state,
+      songs: [action.payload].concat(state.songs)
+    };
     case 'LOAD_SONGS':
       return {
         ...state,

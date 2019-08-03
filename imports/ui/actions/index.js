@@ -113,7 +113,12 @@ export const addTagToSong = (songId, tagId) => {
   };
 };
 
-
+export const addSong = song => {
+  return {
+    type: 'ADD_SONG',
+    payload: song
+  };
+};
 
 export const loadSongs = songs => {
     return {

@@ -44,6 +44,15 @@ Meteor.methods({
     }
   },
 
+  addToUsersLikedSongs: function (songId) {
+
+    var spotifyApi = new SpotifyWebApi();
+
+    var response = spotifyApi.addToMySavedTracks([songId]);
+
+    return response;
+  },
+
   //TODO: Add error case handling and better playlist naming
   createPlaylist: function (playlistName, selectedTracks) {
     if (selectedTracks.length === 0)

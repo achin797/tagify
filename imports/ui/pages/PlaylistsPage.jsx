@@ -4,7 +4,7 @@ import Divider from 'antd/lib/divider';
 import Typography from 'antd/lib/typography';
 import Navbar from '../components/Navbar';
 import TagsPanel from '../components/TagsPanel';
-import PlaylistsList from '../components/PlaylistsList';
+import SongList from '../components/SongList';
 
 const { Title } = Typography;
 
@@ -14,8 +14,10 @@ const PlaylistsPage = ({
         <Layout>
             <Navbar />
             <Layout>
+                <TagsPanel editable />
+                <Divider />
                 <Title>Playlists</Title>
-                <PlaylistsList />
+                <SongList />
             </Layout>
         </Layout>
     </div>

@@ -117,10 +117,19 @@ const mapDispatchToProps = dispatch => {
             description: 'Tag could not be added. Please try again.'
           });
         } else {
-          songIdList = response.tracks.map(track => track.track.id);
+          var trackList = response.tracks.map(track => {
+            var updated_track = {};
+            updated_track['title'] = track.track.name;
+            updated_track['id'] = track.track.id;
+            updated_track['artists'] = track.track.artists.map(artist => {return artist.name;});
+            updated_track['album'] = track.track.album.name;
+            updated_track['tags'] = [tagId];
+            return updated_track;
+            }
+          );
           // reducer: add tag to every song in playlist 
-          for(song in songIdList){
-            dispatch(addTagToSong(songIdList[song], response.tagId));
+          for(song in trackList){
+            dispatch(addTagToSong(trackList[song], response.tagId));
           }
           dispatch(addTagToPlaylist(response.playlistId, response.tagId));
         }

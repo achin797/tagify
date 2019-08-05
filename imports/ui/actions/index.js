@@ -106,10 +106,10 @@ export const toggleCheckTag = tagId => {
   };
 };
 
-export const addTagToSong = (songId, tagId) => {
+export const addTagToSong = (track, tagId) => {
   return {
     type: 'ADD_TAG_TO_SONG',
-    payload: { songId, tagId }
+    payload: { track, tagId }
   };
 };
 

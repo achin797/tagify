@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux';
 import List from 'antd/lib/list';
-import TaggableSong from './TaggableSong';
+import TaggablePlaylist from './TaggablePlaylist';
 import {loadPlaylists} from "../actions";
 import {getPlaylists} from "../utils/helpers";
 
@@ -16,8 +16,7 @@ class PlaylistsList extends Component{
     //Use local state to avoid repeated api calls
 
     if(!this.props.hasLoaded) {
-      Meteor.call("getSavedPlaylists", (err, response) => {
-          console.log(response);
+      Meteor.call("getSavedPlaylists", Meteor.userId(), (err, response) => {
           this.props.loadPlaylists(response);
         }
       )
@@ -25,15 +24,14 @@ class PlaylistsList extends Component{
   }
 
   render(){
-    const dataSource = getPlaylists(this.props.playlists);
-    // const dataSource = this.props.playlists;
-    console.log(dataSource);
+    const dataSource = this.props.playlists;
+
     return (
-      <div id="playlist-list">
+      <div id="song-list">
         <List
           loading={!this.props.hasLoaded}
-          // dataSource={dataSource}
-          // renderItem={song => <TaggableSong song={song} />}
+          dataSource={dataSource}
+          renderItem={playlist => <TaggablePlaylist playlist={playlist} />}
         />
       </div>
     );

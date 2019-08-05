@@ -125,7 +125,6 @@ const playlistsReducer = (
 ) => {
   switch (action.type){
     case 'LOAD_PLAYLISTS':
-      console.log(action.payload);
       return{
         ...state,
         hasLoaded: true,
@@ -133,7 +132,40 @@ const playlistsReducer = (
       };
       default:
           return state;
+
+    case 'ADD_TAG_TO_PLAYLIST':
+      return {
+        ...state,
+        playlists: state.playlists.map(playlist => {
+          return playlist.id === action.payload.playlistId
+            ? {
+              ...playlist,
+              tags: [
+                ...playlist.tags,
+                action.payload.tagId
+              ]
+            }
+            : playlist;
+        })
+      };
+      
+    case 'REMOVE_TAG_FROM_PLAYLIST':
+      return {
+        ...state,
+        playlists: state.playlists.map(playlist => {
+          return playlist.id === action.payload.playlistId
+            ? {
+              ...playlist,
+              tags: playlist.tags.filter(id => {
+                return id !== action.payload.tagId;
+              })
+            }
+            : playlist;
+        })
+      };
   }
+
+  
   
 };
 
@@ -152,19 +184,25 @@ const songsReducer = (
         songs: action.payload
       };
     case 'ADD_TAG_TO_SONG':
-      return {
-        ...state,
-        songs: state.songs.map(song => {
-          return song.id === action.payload.songId
-            ? {
-              ...song,
-              tags: [
-                ...song.tags,
-                action.payload.tagId
-              ]
-            }
-            : song;
-        })
+      const tagExists = state.songs.filter(song => {if (song.id == action.payload.songId){return true}});
+      // avoid duplicate tags
+      if(!tagExists[0].tags.includes(action.payload.tagId)){
+        return {
+          ...state,
+          songs: state.songs.map(song => {
+            return song.id === action.payload.songId
+              ? {
+                ...song,
+                tags: [
+                  ...song.tags,
+                  action.payload.tagId
+                ]
+              }
+              : song;
+          })
+        } 
+      } else{
+        return {...state}
       };
     case 'REMOVE_TAG_FROM_SONG':
       return {

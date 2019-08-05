@@ -77,7 +77,7 @@ class TaggableSong extends Component {
         ))}
       </Menu>
     );
-        
+
     return (
       <Dropdown
         overlay={menu}

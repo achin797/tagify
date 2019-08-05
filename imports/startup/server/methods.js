@@ -34,13 +34,22 @@ Meteor.methods({
         updated_track['album'] = track.album.name;
         updated_track['tags'] = [];
 
+        var currUserDb = Meteor.users.findOne({"_id": Meteor.userId(), "taggedSongs.id": track.id});
+        console.log(currUserDb);
+        if (currUserDb) {
+          tagIdArray = currUserDb.taggedSongs.filter(song => {
+            return song.id === track.id;
+          })[0].tags;
+          updated_track['tags'] = tagIdArray;
+        }
+
         return updated_track;
       });
 
       return updatedTracks;
     }
     catch (err) {
-      throw new Meteor.Error(err.toString());
+      throw new Meteor.Error(err);
     }
   },
 

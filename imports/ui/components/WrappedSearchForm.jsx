@@ -16,10 +16,9 @@ class SearchForm extends Component {
       if (!err) {
         Meteor.call("searchTracks", (values.search), (err, response) => {
           if (err) {
-            console.log(err.toString());
+            console.log(err);
           } else {
             this.props.populateSearchResults(response);
-            console.log(this.props.searchResults);
           }
         })
       }

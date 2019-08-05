@@ -33,15 +33,14 @@ class TaggableSong extends Component {
     const tagId = Number(item.key);
     if(!song.tags.includes(tagId))
     {
-      addTagToSong(song.id, tagId);
       // check if the song being tagged is a searched song and is already in the library
       // if the song is already in the library it won't be pushed to the store, it'll just be tagged and the
       // updated tags will be visible on the home page
-      if(this.props.isSearchedSong && (likedSongs.filter(likedSong => likedSong.id === song.id).length === 0)){
-        //Add song to user's liked songs after tagging it and add the tag to the song object
-        song.tags.push(tagId);
+      if(likedSongs.filter(likedSong => likedSong.id === song.id).length === 0){
+        //Add song to user's liked songs before tagging it
         addSong(song);
       }
+        addTagToSong(song.id, tagId);
     }
     else{
       removeTagFromSong(song.id, tagId);

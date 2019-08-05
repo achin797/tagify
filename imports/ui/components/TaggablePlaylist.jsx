@@ -6,10 +6,12 @@ import List from 'antd/lib/list';
 import Tag from 'antd/lib/tag';
 import {
   addTagToSong,
+  addTagToPlaylist,
   removeTagFromSong,
+  removeTagFromPlaylist
 } from '../actions';
 
-class TaggableSong extends Component {
+class TaggablePlaylist extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,14 +25,14 @@ class TaggableSong extends Component {
 
   handleMenuItemClick(item) {
     const {
-      song,
-      addTagToSong,
-      removeTagFromSong
+      playlist,
+      addTagToPlaylist,
+      removeTagFromPlaylist
     } = this.props;
     const tagId = Number(item.key);
-    !song.tags.includes(tagId)
-      ? addTagToSong(song.id, tagId)
-      : removeTagFromSong(song.id, tagId);
+    !playlist.tags.includes(tagId)
+      ? addTagToPlaylist(playlist.id, tagId, playlist.tracks)
+      : removeTagFromPlaylist(playlist.id, tagId, playlist.tracks);
   }
 
   handleDropdownClick(event) {
@@ -45,14 +47,14 @@ class TaggableSong extends Component {
 
   render() {
     const {
-      song,
+      playlist,
       tags
     } = this.props;
 
     const menu = (
       <Menu
         multiple={true}
-        selectedKeys={song.tags.map(tag => tag.toString())}
+        selectedKeys={playlist.tags.map(tag => tag.toString())}
         onClick={this.handleMenuItemClick}
         style={{ left: `${this.state.mouseOffsetX}px` }}
       >
@@ -76,13 +78,10 @@ class TaggableSong extends Component {
       >
         <List.Item>
           <div>
-            {song.title}
+            {playlist.title}
           </div>
           <div>
-            <span>{song.artists.join(", ")} - {song.album}</span>
-          </div>
-          <div>
-            {song.tags.map((tagId, index) => {
+            {playlist.tags.map((tagId, index) => {
               var displayName = tags
                 .filter(t => t.id === tagId);
               if (displayName.length > 0){
@@ -90,6 +89,7 @@ class TaggableSong extends Component {
               } else{
                 displayName = "";
               }
+
               return <Tag key={index}>{displayName}</Tag>;
             })}
           </div>
@@ -108,31 +108,44 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addTagToSong: (songId, tagId) => {
-      Meteor.call('addSongTag', Meteor.userId(), tagId, songId, (err, response) => {
+    addTagToPlaylist: (playlistId, tagId) => {
+      // adds playlist id w/ associated tag to database, and adds tag to each song in the playlist
+      Meteor.call('addPlaylistTag', Meteor.userId(), tagId, playlistId, (err, response) => {
         if (err) {
           notification.error({
             message: 'Add Tag Failed',
-            description: 'Tag could not be added to song. Please try again.'
+            description: 'Tag could not be added. Please try again.'
           });
         } else {
-          dispatch(addTagToSong(response.songId, response.tagId));
+          songIdList = response.tracks.map(track => track.track.id);
+          // reducer: add tag to every song in playlist 
+          for(song in songIdList){
+            dispatch(addTagToSong(songIdList[song], response.tagId));
+          }
+          dispatch(addTagToPlaylist(response.playlistId, response.tagId));
         }
       });
     },
-    removeTagFromSong: (songId, tagId) => {
-      Meteor.call('removeSongTag', Meteor.userId(), tagId, songId, (err, response) => {
+
+    removeTagFromPlaylist: (playlistId, tagId) => {
+      
+      Meteor.call('removePlaylistTag', Meteor.userId(), tagId, playlistId, (err, response) => {
         if (err) {
           notification.error({
             message: 'Remove Tag Failed',
             description: 'Tag could not be removed. Please reload the page.',
           });
         } else {
-          dispatch(removeTagFromSong(response.songId, response.tagId));
+          songIdList = response.tracks.map(track => track.track.id);
+          for(song in songIdList){
+            dispatch(removeTagFromSong(songIdList[song], response.tagId));
+          }
+          dispatch(removeTagFromPlaylist(response.playlistId, response.tagId));
         }
       });
     },
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TaggableSong);
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaggablePlaylist);

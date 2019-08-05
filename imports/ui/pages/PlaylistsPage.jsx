@@ -14,8 +14,6 @@ const PlaylistsPage = ({
         <Layout>
             <Navbar />
             <Layout>
-                <TagsPanel />
-                <Divider />
                 <Title>Playlists</Title>
                 <PlaylistsList />
             </Layout>

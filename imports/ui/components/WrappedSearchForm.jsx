@@ -38,7 +38,7 @@ class SearchForm extends Component {
           })(
             <Input
               prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />}
-              placeholder="Search"
+              placeholder="Search Spotify"
             />,
           )}
         </Form.Item>

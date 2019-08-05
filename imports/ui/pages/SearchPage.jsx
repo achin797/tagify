@@ -28,7 +28,6 @@ class SearchPage extends Component {
           <Layout>
             <Navbar/>
             <Layout>
-              <Title>Search</Title>
               <TagsPanel editable/>
               <WrappedSearchForm/>
             </Layout>
@@ -41,7 +40,6 @@ class SearchPage extends Component {
           <Layout>
             <Navbar/>
             <Layout>
-              <Title>Search</Title>
               <TagsPanel editable/>
               <WrappedSearchForm/>
               <SearchResults/>

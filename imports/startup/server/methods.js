@@ -35,7 +35,6 @@ Meteor.methods({
         updated_track['tags'] = [];
 
         var currUserDb = Meteor.users.findOne({"_id": Meteor.userId(), "taggedSongs.id": track.id});
-        console.log(currUserDb);
         if (currUserDb) {
           tagIdArray = currUserDb.taggedSongs.filter(song => {
             return song.id === track.id;

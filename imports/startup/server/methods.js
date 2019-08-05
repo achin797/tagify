@@ -113,7 +113,6 @@ Meteor.methods({
 
         } while(response.data.body.next!=null);
 
-<<<<<<< HEAD
         var updatedPlaylists = playlists.map(playlist => {
             var updated_Playlist = {};
             updated_Playlist['title'] = playlist.name;
@@ -153,16 +152,6 @@ Meteor.methods({
             tracks = tracks.concat(response.data.body.items);
         } while(response.data.body.next!=null);
         return tracks;
-=======
-        return playlists;
-    },
-
-    getPlaylistTracks: playlistID => {
-        var spotifyApi = new SpotifyWebApi();
-        let retVal = spotifyApi.getPlaylistTracks(Meteor.user().services.spotify.id, playlistID); 
-        console.log(retVal);
-        return retVal;
->>>>>>> Playlist page progress
     } 
 
 });

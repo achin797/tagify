@@ -127,12 +127,7 @@ export const loadSongs = songs => {
     };
 };
 
-export const loadPlaylists = playlists => {
-<<<<<<< HEAD
-=======
-  console.log(playlists);
->>>>>>> Playlist page progress
-  return {
+export const loadPlaylists = playlists => {  return {
       type: 'LOAD_PLAYLISTS',
       payload: playlists,
   };

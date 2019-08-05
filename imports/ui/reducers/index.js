@@ -117,30 +117,6 @@ const tagsReducer = (
 };
 
 const playlistsReducer = (
-<<<<<<< HEAD
-=======
-  state = {
-    hasLoaded: false,
-    playlists: []
-  },
-  action
-) => {
-  switch (action.type){
-    case 'LOAD_PLAYLISTS':
-      console.log(action.payload);
-      return{
-        ...state,
-        hasLoaded: true,
-        playlists: action.payload
-      };
-      default:
-          return state;
-  }
-  
-};
-
-const songsReducer = (
->>>>>>> Playlist page progress
   state = {
     hasLoaded: false,
     playlists: []

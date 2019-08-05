@@ -20,6 +20,7 @@ export function getToggledSongs(songs, checkedTags, andToggle, filterText="") {
       (song.artists.toString().toLowerCase().includes(filterText)))
   });
 <<<<<<< HEAD
+<<<<<<< HEAD
   return filteredSongs;
 }
 
@@ -46,3 +47,8 @@ export function getPlaylists(playlists) {
   return filteredPlaylist;
 }
 >>>>>>> Playlist page progress
+=======
+  return filteredSongs;
+}
+
+>>>>>>> Implemented Playlist Page

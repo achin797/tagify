@@ -37,15 +37,10 @@ class SearchForm extends Component {
             rules: [{ required: true, message: 'Please input the title!' }],
           })(
             <Input
-              prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              prefix={<Icon type="search"/>}
               placeholder="Search Spotify"
             />,
           )}
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" disabled={hasErrors(getFieldsError())}>
-            Search
-          </Button>
         </Form.Item>
       </Form>
     );

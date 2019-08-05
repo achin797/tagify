@@ -19,36 +19,6 @@ export function getToggledSongs(songs, checkedTags, andToggle, filterText="") {
       (song.album.toLowerCase().includes(filterText)) ||
       (song.artists.toString().toLowerCase().includes(filterText)))
   });
-<<<<<<< HEAD
-<<<<<<< HEAD
   return filteredSongs;
 }
 
-=======
-
-  console.log(filteredSongs);
-
-  return filteredSongs;
-}
-
-
-export function getPlaylists(playlists) {
-  console.log(playlists)
-  let filteredPlaylist = [];
-  for(x in playlists){
-    let tracks = []
-    Meteor.call("getPlaylistTracks", (err, response) => {
-      tracks = response; });
-    console.log(tracks);
-    var playlistInfo = {"name": playlists[x].name, "tracks": playlists[x].tracks};
-    filteredPlaylist.push(playlistInfo)
-  }
-  console.log(filteredPlaylist);
-  return filteredPlaylist;
-}
->>>>>>> Playlist page progress
-=======
-  return filteredSongs;
-}
-
->>>>>>> Implemented Playlist Page

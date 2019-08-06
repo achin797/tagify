@@ -30,7 +30,7 @@ class Navbar extends Component {
       signOut
     } = this.props;
 
-    const pathnames = ['/', '/tags', '/playlists'];
+    const pathnames = ['/', '/tags', '/playlists', '/search'];
     const selectedKey = [
       pathnames
       .findIndex(p => p === location.pathname)

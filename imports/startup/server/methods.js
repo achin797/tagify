@@ -128,7 +128,7 @@ Meteor.methods({
     return updatedTracks;
   },
 
-  getSavedPlaylists: function () {
+  getSavedPlaylists: userId => {
     var spotifyApi = new SpotifyWebApi();
     var offset = 0;
     var playlists = [];

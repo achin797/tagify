@@ -317,7 +317,7 @@ const appReducer = combineReducers({
   tagsPanel: tagsPanelReducer,
   tags: tagsReducer,
   songs: songsReducer,
-  playlists: playlistsReducer
+  playlists: playlistsReducer,
   searchResults: searchResultsReducer,
 });
 

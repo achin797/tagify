@@ -113,13 +113,25 @@ export const addTagToSong = (songId, tagId) => {
   };
 };
 
-
+export const addSong = song => {
+  return {
+    type: 'ADD_SONG',
+    payload: song
+  };
+};
 
 export const loadSongs = songs => {
     return {
         type: 'LOAD_SONGS',
         payload: songs,
     };
+};
+
+export const populateSearchResults = songs => {
+  return {
+    type: 'POPULATE_SEARCH_RESULTS',
+    payload: songs,
+  };
 };
 
 export const removeTagFromSong = (songId, tagId) => {

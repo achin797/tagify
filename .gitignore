@@ -65,3 +65,6 @@ typings/
 
 # mac
 .DS_Store
+
+#iCloud
+.icloud

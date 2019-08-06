@@ -30,7 +30,7 @@ class Navbar extends Component {
       signOut
     } = this.props;
 
-    const pathnames = ['/', '/tags', '/playlists'];
+    const pathnames = ['/', '/tags', '/playlists', '/search'];
     const selectedKey = [
       pathnames
       .findIndex(p => p === location.pathname)
@@ -73,6 +73,12 @@ class Navbar extends Component {
               <Link to="/playlists">
                 <Icon type="play-square" />
                 <span>Playlists</span>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="3">
+              <Link to="/search">
+                <Icon type="search" />
+                <span>Search</span>
               </Link>
             </Menu.Item>
           </Menu>

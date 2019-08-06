@@ -14,11 +14,12 @@ class SearchForm extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        Meteor.call("searchTracks", (values.search), (err, response) => {
+        const searchString = values.search;
+        Meteor.call("searchTracks", (searchString), (err, response) => {
           if (err) {
             console.log(err);
           } else {
-            this.props.populateSearchResults(response);
+            this.props.populateSearchResults(response, searchString);
           }
         })
       }
@@ -35,6 +36,7 @@ class SearchForm extends Component {
         <Form.Item validateStatus={titleError ? 'error' : ''} help={titleError || ''}>
           {getFieldDecorator('search', {
             rules: [{ required: true, message: 'Please input the title!' }],
+            initialValue: this.props.searchString,
           })(
             <Input
               prefix={<Icon type="search"/>}
@@ -49,7 +51,7 @@ class SearchForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    searchResults: state.searchResults.songs,
+    searchString: state.searchResults.searchString,
   };
 };
 

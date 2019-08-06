@@ -182,7 +182,8 @@ const songsReducer = (
 const searchResultsReducer = (
   state = {
     initialSearchMade: false,
-    songs: []
+    songs: [],
+    searchString: '',
   },
   action
 ) => {
@@ -191,7 +192,8 @@ const searchResultsReducer = (
       return {
         ...state,
         initialSearchMade: true,
-        songs: action.payload
+        songs: action.payload.songs,
+        searchString: action.payload.searchString,
       };
     case 'ADD_TAG_TO_SONG':
       return {

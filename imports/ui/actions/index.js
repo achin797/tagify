@@ -127,10 +127,10 @@ export const loadSongs = songs => {
     };
 };
 
-export const populateSearchResults = songs => {
+export const populateSearchResults = (songs, searchString) => {
   return {
     type: 'POPULATE_SEARCH_RESULTS',
-    payload: songs,
+    payload: {songs, searchString},
   };
 };
 

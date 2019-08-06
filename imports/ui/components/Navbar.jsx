@@ -18,7 +18,9 @@ const { Item } = Menu;
 
 class Navbar extends Component {
   componentDidMount() {
-    this.props.getUser();
+    if (!this.props.userDisplayName) {
+      this.props.getUser();
+    }
   }
 
   render() {

@@ -4,6 +4,7 @@ import Checkbox from 'antd/lib/checkbox';
 import Divider from 'antd/lib/divider';
 import Typography from 'antd/lib/typography';
 import Button from "antd/lib/button";
+import Icon from 'antd/lib/icon';
 import Input from "antd/lib/input";
 import Navbar from '../components/Navbar';
 import TagsPanel from '../components/TagsPanel';
@@ -80,9 +81,13 @@ class HomePage extends Component{
                         </span>
                         <Divider />
                         <Title>Liked Songs</Title>
-                        <Input placeholder="Filter" allowClear onChange={event => {
-                          this.updateFilter(event.target.value.toLowerCase());
-                        }}
+                        <Input
+                          placeholder="Filter"
+                          allowClear
+                          prefix={<Icon type="search" />}
+                          onChange={event => {
+                            this.updateFilter(event.target.value.toLowerCase());
+                          }}
                         />
                         <SongList andToggle={this.state.andOrToggle} filterText={this.state.filterText}/>
                     </Layout>

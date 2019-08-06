@@ -119,6 +119,12 @@ export const addTagToPlaylist = (playlistId, tagId) => {
     payload: { playlistId, tagId }
   };
 };
+export const addSong = song => {
+  return {
+    type: 'ADD_SONG',
+    payload: song
+  };
+};
 
 export const loadSongs = songs => {
     return {
@@ -130,6 +136,12 @@ export const loadSongs = songs => {
 export const loadPlaylists = playlists => {  return {
       type: 'LOAD_PLAYLISTS',
       payload: playlists,
+    };
+};
+export const populateSearchResults = (songs, searchString) => {
+  return {
+    type: 'POPULATE_SEARCH_RESULTS',
+    payload: {songs, searchString},
   };
 };
 

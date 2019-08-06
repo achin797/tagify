@@ -5,6 +5,7 @@ import Menu from 'antd/lib/menu';
 import List from 'antd/lib/list';
 import Tag from 'antd/lib/tag';
 import {
+  addSong,
   addTagToSong,
   removeTagFromSong,
 } from '../actions';
@@ -25,12 +26,25 @@ class TaggableSong extends Component {
     const {
       song,
       addTagToSong,
-      removeTagFromSong
+      removeTagFromSong,
+      addSong,
+      likedSongs,
     } = this.props;
     const tagId = Number(item.key);
-    !song.tags.includes(tagId)
-      ? addTagToSong(song.id, tagId)
-      : removeTagFromSong(song.id, tagId);
+    if(!song.tags.includes(tagId))
+    {
+      // check if the song being tagged is a searched song and is already in the library
+      // if the song is already in the library it won't be pushed to the store, it'll just be tagged and the
+      // updated tags will be visible on the home page
+      if(likedSongs.filter(likedSong => likedSong.id === song.id).length === 0){
+        //Add song to user's liked songs before tagging it
+        addSong(song);
+      }
+        addTagToSong(song.id, tagId);
+    }
+    else{
+      removeTagFromSong(song.id, tagId);
+    }
   }
 
   handleDropdownClick(event) {
@@ -63,7 +77,7 @@ class TaggableSong extends Component {
         ))}
       </Menu>
     );
-        
+
     return (
       <Dropdown
         overlay={menu}
@@ -99,15 +113,33 @@ class TaggableSong extends Component {
   }
 }
 
+TaggableSong.defaultProps = {
+  isSearchedSong: false,
+};
+
 const mapStateToProps = state => {
   return {
-    tags: state.tags.tags
+    tags: state.tags.tags,
+    likedSongs: state.songs.songs
   };
 };
 
 
 const mapDispatchToProps = dispatch => {
   return {
+    addSong: (song) => {
+      Meteor.call('addToUsersLikedSongs', song.id, (err, response) => {
+        if (err){
+          notification.error({
+            message: 'Add Tag Failed',
+            description: err.toString()
+          });
+        }
+        else {
+          dispatch(addSong(song));
+        }
+      })
+    },
     addTagToSong: (songId, tagId) => {
       Meteor.call('addSongTag', Meteor.userId(), tagId, songId, (err, response) => {
         if (err) {

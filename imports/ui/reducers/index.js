@@ -126,6 +126,7 @@ const playlistsReducer = (
   switch (action.type){
     case 'LOAD_PLAYLISTS':
       return{
+
         ...state,
         hasLoaded: true,
         playlists: action.payload
@@ -251,12 +252,73 @@ const songsReducer = (
   }
 };
 
+
+const searchResultsReducer = (
+  state = {
+    initialSearchMade: false,
+    songs: [],
+    searchString: '',
+  },
+  action
+) => {
+  switch (action.type) {
+    case 'POPULATE_SEARCH_RESULTS':
+      return {
+        ...state,
+        initialSearchMade: true,
+        songs: action.payload.songs,
+        searchString: action.payload.searchString,
+      };
+    case 'ADD_TAG_TO_SONG':
+      return {
+        ...state,
+        songs: state.songs.map(song => {
+          return song.id === action.payload.songId
+            ? {
+              ...song,
+              tags: [
+                ...song.tags,
+                action.payload.tagId
+              ]
+            }
+            : song;
+        })
+      };
+    case 'REMOVE_TAG_FROM_SONG':
+      return {
+        ...state,
+        songs: state.songs.map(song => {
+          return song.id === action.payload.songId
+            ? {
+              ...song,
+              tags: song.tags.filter(id => {
+                return id !== action.payload.tagId;
+              })
+            }
+            : song;
+        })
+      };
+    case 'DELETE_TAG_REQUEST':
+      return {
+        ...state,
+        songs: state.songs.map(song => {
+          return {
+            ...song,
+            tags: song.tags.filter(id => id !== action.payload)
+          };
+        })
+      };
+    default:
+      return state;
+  }
+};
 const appReducer = combineReducers({
   navbar: navbarReducer,
   tagsPanel: tagsPanelReducer,
   tags: tagsReducer,
   songs: songsReducer,
   playlists: playlistsReducer
+  searchResults: searchResultsReducer,
 });
 
 const rootReducer = (state, action) => {

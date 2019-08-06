@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import List from 'antd/lib/list';
 import TaggablePlaylist from './TaggablePlaylist';
 import {loadPlaylists} from "../actions";
-import {getPlaylists} from "../utils/helpers";
 
 
 class PlaylistsList extends Component{

@@ -5,12 +5,13 @@ import Menu from 'antd/lib/menu';
 import List from 'antd/lib/list';
 import Tag from 'antd/lib/tag';
 import {
-  addSong,
   addTagToSong,
+  addTagToPlaylist,
   removeTagFromSong,
+  removeTagFromPlaylist
 } from '../actions';
 
-class TaggableSong extends Component {
+class TaggablePlaylist extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,27 +25,14 @@ class TaggableSong extends Component {
 
   handleMenuItemClick(item) {
     const {
-      song,
-      addTagToSong,
-      removeTagFromSong,
-      addSong,
-      likedSongs,
+      playlist,
+      addTagToPlaylist,
+      removeTagFromPlaylist
     } = this.props;
     const tagId = Number(item.key);
-    if(!song.tags.includes(tagId))
-    {
-      // check if the song being tagged is a searched song and is already in the library
-      // if the song is already in the library it won't be pushed to the store, it'll just be tagged and the
-      // updated tags will be visible on the home page
-      if(likedSongs.filter(likedSong => likedSong.id === song.id).length === 0){
-        //Add song to user's liked songs before tagging it
-        addSong(song);
-      }
-        addTagToSong(song.id, tagId);
-    }
-    else{
-      removeTagFromSong(song.id, tagId);
-    }
+    !playlist.tags.includes(tagId)
+      ? addTagToPlaylist(playlist.id, tagId, playlist.tracks)
+      : removeTagFromPlaylist(playlist.id, tagId, playlist.tracks);
   }
 
   handleDropdownClick(event) {
@@ -59,14 +47,14 @@ class TaggableSong extends Component {
 
   render() {
     const {
-      song,
+      playlist,
       tags
     } = this.props;
 
     const menu = (
       <Menu
         multiple={true}
-        selectedKeys={song.tags.map(tag => tag.toString())}
+        selectedKeys={playlist.tags.map(tag => tag.toString())}
         onClick={this.handleMenuItemClick}
         style={{ left: `${this.state.mouseOffsetX}px` }}
       >
@@ -77,7 +65,7 @@ class TaggableSong extends Component {
         ))}
       </Menu>
     );
-
+        
     return (
       <Dropdown
         overlay={menu}
@@ -90,13 +78,10 @@ class TaggableSong extends Component {
       >
         <List.Item>
           <div>
-            {song.title}
+            {playlist.title}
           </div>
           <div>
-            <span>{song.artists.join(", ")} - {song.album}</span>
-          </div>
-          <div>
-            {song.tags.map((tagId, index) => {
+            {playlist.tags.map((tagId, index) => {
               var displayName = tags
                 .filter(t => t.id === tagId);
               if (displayName.length > 0){
@@ -104,6 +89,7 @@ class TaggableSong extends Component {
               } else{
                 displayName = "";
               }
+
               return <Tag key={index}>{displayName}</Tag>;
             })}
           </div>
@@ -113,58 +99,62 @@ class TaggableSong extends Component {
   }
 }
 
-TaggableSong.defaultProps = {
-  isSearchedSong: false,
-};
-
 const mapStateToProps = state => {
   return {
-    tags: state.tags.tags,
-    likedSongs: state.songs.songs
+    tags: state.tags.tags
   };
 };
 
 
 const mapDispatchToProps = dispatch => {
   return {
-    addSong: (song) => {
-      Meteor.call('addToUsersLikedSongs', song.id, (err, response) => {
-        if (err){
-          notification.error({
-            message: 'Add Tag Failed',
-            description: err.toString()
-          });
-        }
-        else {
-          dispatch(addSong(song));
-        }
-      })
-    },
-    addTagToSong: (songId, tagId) => {
-      Meteor.call('addSongTag', Meteor.userId(), tagId, songId, (err, response) => {
+    addTagToPlaylist: (playlistId, tagId) => {
+      // adds playlist id w/ associated tag to database, and adds tag to each song in the playlist
+      Meteor.call('addPlaylistTag', Meteor.userId(), tagId, playlistId, (err, response) => {
         if (err) {
           notification.error({
             message: 'Add Tag Failed',
-            description: 'Tag could not be added to song. Please try again.'
+            description: 'Tag could not be added. Please try again.'
           });
         } else {
-          dispatch(addTagToSong(response.songId, response.tagId));
+          var trackList = response.tracks.map(track => {
+            var updated_track = {};
+            updated_track['title'] = track.track.name;
+            updated_track['id'] = track.track.id;
+            updated_track['artists'] = track.track.artists.map(artist => {return artist.name;});
+            updated_track['album'] = track.track.album.name;
+            updated_track['tags'] = [tagId];
+            return updated_track;
+            }
+          );
+          // reducer: add tag to every song in playlist 
+          for(song in trackList){
+            dispatch(addTagToSong(trackList[song], response.tagId));
+          }
+          dispatch(addTagToPlaylist(response.playlistId, response.tagId));
         }
       });
     },
-    removeTagFromSong: (songId, tagId) => {
-      Meteor.call('removeSongTag', Meteor.userId(), tagId, songId, (err, response) => {
+
+    removeTagFromPlaylist: (playlistId, tagId) => {
+      
+      Meteor.call('removePlaylistTag', Meteor.userId(), tagId, playlistId, (err, response) => {
         if (err) {
           notification.error({
             message: 'Remove Tag Failed',
             description: 'Tag could not be removed. Please reload the page.',
           });
         } else {
-          dispatch(removeTagFromSong(response.songId, response.tagId));
+          songIdList = response.tracks.map(track => track.track.id);
+          for(song in songIdList){
+            dispatch(removeTagFromSong(songIdList[song], response.tagId));
+          }
+          dispatch(removeTagFromPlaylist(response.playlistId, response.tagId));
         }
       });
     },
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TaggableSong);
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaggablePlaylist);

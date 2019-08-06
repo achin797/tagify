@@ -106,13 +106,19 @@ export const toggleCheckTag = tagId => {
   };
 };
 
-export const addTagToSong = (songId, tagId) => {
+export const addTagToSong = (track, tagId) => {
   return {
     type: 'ADD_TAG_TO_SONG',
-    payload: { songId, tagId }
+    payload: { track, tagId }
   };
 };
 
+export const addTagToPlaylist = (playlistId, tagId) => {
+  return {
+    type: 'ADD_TAG_TO_PLAYLIST',
+    payload: { playlistId, tagId }
+  };
+};
 export const addSong = song => {
   return {
     type: 'ADD_SONG',
@@ -127,6 +133,11 @@ export const loadSongs = songs => {
     };
 };
 
+export const loadPlaylists = playlists => {  return {
+      type: 'LOAD_PLAYLISTS',
+      payload: playlists,
+    };
+};
 export const populateSearchResults = (songs, searchString) => {
   return {
     type: 'POPULATE_SEARCH_RESULTS',
@@ -138,5 +149,12 @@ export const removeTagFromSong = (songId, tagId) => {
   return {
     type: 'REMOVE_TAG_FROM_SONG',
     payload: { songId, tagId }
+  };
+};
+
+export const removeTagFromPlaylist = (playlistId, tagId) => {
+  return {
+    type: 'REMOVE_TAG_FROM_PLAYLIST',
+    payload: { playlistId, tagId }
   };
 };

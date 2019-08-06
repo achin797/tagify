@@ -146,8 +146,46 @@ Meteor.methods({
 
     } while (response.data.body.next != null);
 
-    return playlists;
-  }
+    var updatedPlaylists = playlists.map(playlist => {
+            var updated_Playlist = {};
+            updated_Playlist['title'] = playlist.name;
+            updated_Playlist['id'] = playlist.id;
+            updated_Playlist['tracks'] = playlist.tracks;
+            updated_Playlist['tags'] = [];
+
+            // Grab song tags from DB, if any exist: 
+            var currUserDb = Meteor.users.findOne({"_id": userId, "taggedPlaylists.id": playlist.id });
+
+            if(currUserDb){
+                tagIdArray = currUserDb.taggedPlaylists.filter( taggedPlaylist => { 
+                    if (taggedPlaylist.id === playlist.id){
+                        return true;                    
+                    } else{
+                        return false;
+                    }})[0].tags;
+                updated_Playlist['tags'] = tagIdArray;
+            }
+            return updated_Playlist;
+        });
+
+        return updatedPlaylists;
+    },
+
+    getPlaylistTracks: playlistId => {
+        var spotifyApi = new SpotifyWebApi();
+        var offset = 0;
+        var tracks = [];
+
+        do {
+            var response = spotifyApi.getPlaylistTracks(Meteor.user().services.spotify.id, playlistId, {offset: offset}); 
+            if (checkTokenRefreshed(response, spotifyApi)) {
+                response = spotifyApi.getPlaylistTracks(Meteor.user().services.spotify.id, playlistId, {offset: offset}); 
+            }
+            offset += response.data.body.limit;
+            tracks = tracks.concat(response.data.body.items);
+        } while(response.data.body.next!=null);
+        return tracks;
+    } 
 });
 
 var checkTokenRefreshed = function (response, api) {

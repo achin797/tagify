@@ -116,6 +116,57 @@ const tagsReducer = (
   }
 };
 
+const playlistsReducer = (
+  state = {
+    hasLoaded: false,
+    playlists: []
+  },
+  action
+) => {
+  switch (action.type){
+    case 'LOAD_PLAYLISTS':
+      return{
+
+        ...state,
+        hasLoaded: true,
+        playlists: action.payload
+      };
+      default:
+          return state;
+
+    case 'ADD_TAG_TO_PLAYLIST':
+      return {
+        ...state,
+        playlists: state.playlists.map(playlist => {
+          return playlist.id === action.payload.playlistId
+            ? {
+              ...playlist,
+              tags: [
+                ...playlist.tags,
+                action.payload.tagId
+              ]
+            }
+            : playlist;
+        })
+      };
+      
+    case 'REMOVE_TAG_FROM_PLAYLIST':
+      return {
+        ...state,
+        playlists: state.playlists.map(playlist => {
+          return playlist.id === action.payload.playlistId
+            ? {
+              ...playlist,
+              tags: playlist.tags.filter(id => {
+                return id !== action.payload.tagId;
+              })
+            }
+            : playlist;
+        })
+      };
+  }
+};
+
 const songsReducer = (
   state = {
     hasLoaded: false,
@@ -124,11 +175,6 @@ const songsReducer = (
   action
 ) => {
   switch (action.type) {
-    case 'ADD_SONG':
-    return {
-      ...state,
-      songs: [action.payload].concat(state.songs)
-    };
     case 'LOAD_SONGS':
       return {
         ...state,
@@ -136,20 +182,47 @@ const songsReducer = (
         songs: action.payload
       };
     case 'ADD_TAG_TO_SONG':
-      return {
-        ...state,
-        songs: state.songs.map(song => {
-          return song.id === action.payload.songId
-            ? {
-              ...song,
-              tags: [
-                ...song.tags,
-                action.payload.tagId
-              ]
-            }
-            : song;
-        })
-      };
+      // check if song exists in the pre-loaded user library
+      // and set trackId to proper value
+      var songExists = null; 
+      var trackId = action.payload.track;
+      if (action.payload.track.id){
+        // if whole track information in payload (e.g. called by adding playlist)
+        songExists = state.songs.filter(song => {if (song.id == action.payload.track.id){return true}});
+        trackId = action.payload.track.id;
+      } else {
+        // if individual songId in payload
+        songExists = state.songs.filter(song => {if (song.id == action.payload.track){return true}});
+      }
+
+      if (songExists.length > 0){
+        // avoid duplicate tags
+        if(!songExists[0].tags.includes(action.payload.tagId)){
+          return {
+            ...state,
+            songs: state.songs.map(song => {
+              return song.id === trackId
+                ? {
+                  ...song,
+                  tags: [
+                    ...song.tags,
+                    action.payload.tagId
+                  ]
+                }
+                : song;
+            })
+          } 
+        } else{
+          return {...state}
+        };
+      } else{
+        let updateSongs = state.songs;
+        updateSongs.push(action.payload.track);
+        return {
+          ...state,
+          songs: updateSongs
+        } 
+      }
     case 'REMOVE_TAG_FROM_SONG':
       return {
         ...state,
@@ -178,6 +251,7 @@ const songsReducer = (
       return state;
   }
 };
+
 
 const searchResultsReducer = (
   state = {
@@ -238,14 +312,12 @@ const searchResultsReducer = (
       return state;
   }
 };
-
-
-
 const appReducer = combineReducers({
   navbar: navbarReducer,
   tagsPanel: tagsPanelReducer,
   tags: tagsReducer,
   songs: songsReducer,
+  playlists: playlistsReducer
   searchResults: searchResultsReducer,
 });
 

@@ -19,6 +19,6 @@ export function getToggledSongs(songs, checkedTags, andToggle, filterText="") {
       (song.album.toLowerCase().includes(filterText)) ||
       (song.artists.toString().toLowerCase().includes(filterText)))
   });
-
   return filteredSongs;
 }
+

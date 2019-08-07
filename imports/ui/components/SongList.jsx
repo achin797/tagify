@@ -16,7 +16,6 @@ class SongList extends Component{
 
     if(!this.props.hasLoaded) {
       Meteor.call("getSavedTracks", Meteor.userId(), (err, response) => {
-          console.log("This message should only display on initial load");
           this.props.loadSongs(response);
         }
       )

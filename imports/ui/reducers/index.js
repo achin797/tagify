@@ -175,6 +175,11 @@ const songsReducer = (
   action
 ) => {
   switch (action.type) {
+    case 'ADD_SONG':
+      return {
+        ...state,
+        songs: [action.payload].concat(state.songs)
+      };
     case 'LOAD_SONGS':
       return {
         ...state,
@@ -273,7 +278,7 @@ const searchResultsReducer = (
       return {
         ...state,
         songs: state.songs.map(song => {
-          return song.id === action.payload.songId
+          return song.id === action.payload.track
             ? {
               ...song,
               tags: [

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Form, Input, Button } from 'antd';
+import Form from 'antd/lib/form';
+import Input from 'antd/lib/input';
+import Button from 'antd/lib/button';
 import Icon from "antd/lib/icon";
 import {populateSearchResults} from "../actions";
 import {connect} from "react-redux";

@@ -315,6 +315,17 @@ body {
       }
 
       & > h1 { color: white; }
+
+      & div#song-list {
+        & div.ant-tag {
+          background-color: inherit;
+          color: white;
+          cursor: pointer;
+          margin-top: 0.3rem;
+
+          &:hover { opacity: 1; }
+        }
+      }
     }
   }
 }
@@ -329,7 +340,15 @@ body {
       background-color: @background-dark;
       padding: 1rem 10rem;
 
-      & > h1 { color: white; }
+      & > div.ant-divider {
+        background-color: @text-color-song-info;
+        border-top: 0;
+        min-height: 1px;
+      }
+
+      & > div#search-results {
+        margin-top: 1rem;
+      }
     }
   }
   #horizontal_login_search {

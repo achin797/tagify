@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Navbar from '../components/Navbar';
+import Divider from 'antd/lib/divider';
 import Layout from 'antd/lib/layout';
-import Typography from 'antd/lib/typography';
 import notification from 'antd/lib/notification';
 import WrappedSearchForm from "../components/WrappedSearchForm";
 import TagsPanel from "../components/TagsPanel";
@@ -13,41 +13,25 @@ import {
 } from '../actions';
 import SearchResults from "../components/SearchResults";
 
-const {Title} = Typography;
-
 class SearchPage extends Component {
   componentDidMount() {
     this.props.getTags();
   }
 
   render() {
-
-    if (!this.props.initialSearchMade) {
-      return (
-        <div id="search-page">
+    return (
+      <div id="search-page">
+        <Layout>
+          <Navbar/>
           <Layout>
-            <Navbar/>
-            <Layout>
-              <TagsPanel editable/>
-              <WrappedSearchForm/>
-            </Layout>
+            <TagsPanel plain />
+            <Divider />
+            <WrappedSearchForm/>
+            {this.props.initialSearchMade && (<SearchResults/>)}
           </Layout>
-        </div>
-      );
-    } else {
-      return (
-        <div id="search-page">
-          <Layout>
-            <Navbar/>
-            <Layout>
-              <TagsPanel editable/>
-              <WrappedSearchForm/>
-              <SearchResults/>
-            </Layout>
-          </Layout>
-        </div>
-      );
-    }
+        </Layout>
+      </div>
+    );
   }
 }
 

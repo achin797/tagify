@@ -48,6 +48,7 @@ class TagsPanel extends Component {
   render() {
     const {
       editable,
+      plain,
       tags,
       checkedTags,
       inputVisible,
@@ -70,7 +71,12 @@ class TagsPanel extends Component {
             </span>
           );
         })}
-        {!editable && tags.map((tag, index) => {
+        {plain && tags.map((tag, index) => (
+          <span key={index}>
+            <Tag>{tag.displayName}</Tag>
+          </span>
+        ))}
+        {!editable && !plain && tags.map((tag, index) => {
           return (
             <span key={index}>
               <CheckableTag

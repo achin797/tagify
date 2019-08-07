@@ -87,7 +87,7 @@ class TaggablePlaylist extends Component {
               if (displayName.length > 0){
                 displayName = displayName[0].displayName;
               } else{
-                displayName = "";
+                return null;
               }
 
               return <Tag key={index}>{displayName}</Tag>;

@@ -12,7 +12,6 @@ import SongList from '../components/SongList';
 import {connect} from "react-redux";
 import {getTagsFailure, getTagsRequest, getTagsSuccess} from "../actions";
 import notification from "antd/lib/notification";
-import Switch from "antd/lib/switch";
 import {getToggledSongs} from "../utils/helpers";
 
 const { Title } = Typography;
@@ -42,7 +41,12 @@ class HomePage extends Component{
 
 
   createPlaylist(){
-    let playlistName = this.props.checkedTags.join(", ");
+    let checkedTagsNames = this.props.tags.filter(tag =>
+      this.props.checkedTags.includes(tag.id))
+      .map(tag => tag.displayName);
+
+    let playlistName = "Tagify - " + checkedTagsNames.join(", ") +
+      (this.state.andOrToggle ? " (INCLUDE_ALL)": "");
 
     //fetching the songs to add to playlist based on selected tags
     let selected_songs = getToggledSongs(this.props.songs, this.props.checkedTags, this.state.andOrToggle);
@@ -100,7 +104,8 @@ class HomePage extends Component{
 const mapStateToProps = state => {
   return {
     checkedTags: state.tagsPanel.checkedTags,
-    songs: state.songs.songs
+    songs: state.songs.songs,
+    tags: state.tags.tags,
   };
 };
 

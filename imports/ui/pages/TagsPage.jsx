@@ -12,7 +12,8 @@ import TagsPanel from '../components/TagsPanel';
 import {
   getTagsRequest,
   getTagsSuccess,
-  getTagsFailure
+  getTagsFailure,
+  loadPlaylists
 } from '../actions';
 import Checkbox from "antd/lib/checkbox";
 import Button from "antd/lib/button";
@@ -61,6 +62,9 @@ class TagsPage extends Component {
       } else {
         notification.success({
           message: "Added playlist to your library"
+        });
+        Meteor.call("getSavedPlaylists", Meteor.userId(), (err, response) => {
+          this.props.loadPlaylists(response);
         });
       }
     })
@@ -180,7 +184,8 @@ const mapDispatchToProps = dispatch => {
       Meteor.call('getSavedTracks', Meteor.userId(), (err, response) => {
         dispatch({ type: 'LOAD_SONGS', payload: response });
       });
-    }
+    },
+    loadPlaylists: response => dispatch(loadPlaylists(response))
   };
 };
 

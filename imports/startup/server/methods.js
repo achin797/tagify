@@ -121,9 +121,36 @@ Meteor.methods({
         })[0].tags;
         updated_track['tags'] = tagIdArray;
       }
-
+ 
       return updated_track;
     });
+
+
+    // load all songs that have been tagged before, but are not in the users "liked" songs
+    var userDbSongs = Meteor.users.findOne(userId).taggedSongs;
+    var currTracks = updatedTracks.map(track => {return track.id});
+
+    for (song in userDbSongs){
+      if (!currTracks.includes(userDbSongs[song].id)){
+        var trackInfo = [];
+        do {
+          var response = spotifyApi.getTrack(userDbSongs[song].id);
+          if (checkTokenRefreshed(response, spotifyApi)) {
+            response = spotifyApi.getTrack(userDbSongs[song].id);
+          }
+          trackInfo = trackInfo.concat(response.data.body);
+        } while (response.data.body.next != null);
+        var updated_track = {};
+        updated_track['title'] = trackInfo[0].name;
+        updated_track['id'] = trackInfo[0].id;
+        updated_track['artists'] = trackInfo[0].artists.map(artist => {return artist.name;});
+        updated_track['album'] = trackInfo[0].album.name;
+        updated_track['tags'] = userDbSongs[song].tags;
+
+        updatedTracks.push(updated_track);
+      }
+    }
+
 
     return updatedTracks;
   },

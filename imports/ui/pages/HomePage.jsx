@@ -20,7 +20,7 @@ class HomePage extends Component{
 
   constructor(props) {
     super(props);
-    this.state = {andOrToggle: false, filterText: ""};
+    this.state = {filterText: ""};
   }
 
   componentDidMount() {
@@ -72,16 +72,6 @@ class HomePage extends Component{
                     <Layout>
                         <span>
                           <TagsPanel />
-                          <div>
-                            <Checkbox onChange={e => this.flipToggle(e)} />&nbsp;include all
-                          </div>
-                          <Button
-                            className="generate-playlist-button"
-                            type="primary"
-                            disabled={this.props.checkedTags.length === 0}
-                            onClick={() => this.createPlaylist()}>
-                            Generate Playlist
-                          </Button>
                         </span>
                         <Divider />
                         <Title>Liked Songs</Title>
@@ -93,7 +83,7 @@ class HomePage extends Component{
                             this.updateFilter(event.target.value.toLowerCase());
                           }}
                         />
-                        <SongList andToggle={this.state.andOrToggle} filterText={this.state.filterText}/>
+                        <SongList filterText={this.state.filterText}/>
                     </Layout>
                 </Layout>
             </div>

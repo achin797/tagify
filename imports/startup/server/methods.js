@@ -75,12 +75,34 @@ Meteor.methods({
       response = spotifyApi.createPlaylist(Meteor.user().services.spotify.id, playlistName, {public: true});
     }
 
+    const playlistId = response.data.body.id;
+
+    var filtered = selectedTracks.filter(function (el) {
+      return el != null;
+    });
+
     // Put songs into the playlist.
     var uris = selectedTracks.map(function (track) {
       return "spotify:track:" + track.id;
     });
 
-    response = spotifyApi.addTracksToPlaylist(Meteor.user().services.spotify.id, response.data.body.id, uris, {});
+    uris = uris.filter(function (el) {
+      return el !== 'spotify:track:null';
+    });
+
+    var offset = 0;
+
+    do {
+
+      response = spotifyApi.addTracksToPlaylist(Meteor.user().services.spotify.id, playlistId, uris.slice(offset, offset + 50), {limit:50});
+
+      if (checkTokenRefreshed(response, spotifyApi)) {
+        response = spotifyApi.addTracksToPlaylist(Meteor.user().services.spotify.id, playlistId, uris.slice(offset, offset + 50), {limit:50});
+      }
+
+      offset += 50
+
+    } while (offset < uris.length);
 
     return response.data.body;
   },

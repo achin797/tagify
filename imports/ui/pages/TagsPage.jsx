@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import Layout from 'antd/lib/layout';
 import List from 'antd/lib/list';
 import Tag from 'antd/lib/tag';
+import Tooltip from 'antd/lib/tooltip';
 import Typography from 'antd/lib/typography';
 import notification from 'antd/lib/notification';
 import TagsPanel from '../components/TagsPanel';
@@ -88,13 +89,32 @@ class TagsPage extends Component {
               <div>
                 <Checkbox onChange={e => this.flipToggle(e)}/>&nbsp;include all
               </div>
-              <Button
-                className="generate-playlist-button"
-                type="primary"
-                disabled={this.props.checkedTags.length === 0}
-                onClick={() => this.createPlaylist()}>
-                Generate Playlist
-              </Button>
+              {this.props.checkedTags.length === 0 && (
+                <Tooltip
+                  title="Click on tags above to filter"
+                  mouseEnterDelay={0}
+                  mouseLeaveDelay={0.5}
+                  placement="right"
+                >
+                  <Button
+                    className="generate-playlist-button"
+                    type="primary"
+                    disabled
+                  >
+                    Generate Playlist
+                  </Button>
+                </Tooltip>
+              )}
+              {this.props.checkedTags.length !== 0 && (
+                <Button
+                  className="generate-playlist-button"
+                  type="primary"
+                  disabled={this.props.checkedTags.length === 0}
+                  onClick={() => this.createPlaylist()}
+                >
+                  Generate Playlist
+                </Button>
+              )}
             </span>
             <Divider/>
             <Title>Tagged Songs</Title>

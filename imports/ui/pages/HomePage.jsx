@@ -37,7 +37,7 @@ class HomePage extends Component{
                     <Navbar />
                     <Layout>
                         <span>
-                          <TagsPanel />
+                          <TagsPanel plain />
                         </span>
                         <Divider />
                         <Title>Liked Songs</Title>

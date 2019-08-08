@@ -10,6 +10,7 @@ import TagsPage from '../../ui/pages/TagsPage';
 import PlayListsPage from '../../ui/pages/PlaylistsPage'
 import NotFoundPage from '../../ui/pages/NotFoundPage';
 import SearchPage from "../../ui/pages/SearchPage";
+import ManagePage from '../../ui/pages/ManagePage';
 
 const browserHistory = createBrowserHistory();
 
@@ -21,6 +22,7 @@ export const renderRoutes = () => (
       <PrivateRoute path="/tags" component={TagsPage} />
       <PrivateRoute path="/playlists" component={PlayListsPage} />
       <PrivateRoute path="/search" component={SearchPage} />
+      <PrivateRoute path="/manage" component={ManagePage} />
       <Route component={NotFoundPage} />
     </Switch>
   </Router>

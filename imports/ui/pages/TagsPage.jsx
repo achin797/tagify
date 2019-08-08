@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import Divider from 'antd/lib/divider';
 import Navbar from '../components/Navbar';
 import Layout from 'antd/lib/layout';
@@ -13,15 +13,56 @@ import {
   getTagsSuccess,
   getTagsFailure
 } from '../actions';
+import Checkbox from "antd/lib/checkbox";
+import Button from "antd/lib/button";
+import {getToggledSongs} from "../utils/helpers";
 
-const { Title } = Typography;
+const {Title} = Typography;
 
 class TagsPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {andOrToggle: false};
+  }
+
   componentDidMount() {
     this.props.getTags();
     if (!this.props.hasLoaded) {
       this.props.getSavedTracks();
     }
+  }
+
+  flipToggle(e) {
+    this.setState({
+      andOrToggle: e.target.checked
+    })
+  }
+
+  createPlaylist(){
+    let checkedTagsNames = this.props.tags.filter(tag =>
+      this.props.checkedTags.includes(tag.id))
+      .map(tag => tag.displayName);
+
+    let playlistName = "Tagify - " + checkedTagsNames.join(", ") +
+      (this.state.andOrToggle ? " (INCLUDE_ALL)": "");
+
+    const taggedSongs = this.props.songs.filter(song => {
+      return song.tags.length > 0;
+    });
+
+    const dataSource = getToggledSongs(taggedSongs, this.props.checkedTags, this.state.andOrToggle);
+
+    Meteor.call("createPlaylist", playlistName, dataSource, (err, response) => {
+      if (err) {
+        notification.error({
+          message: err.error
+        });
+      } else {
+        notification.success({
+          message: "Added playlist to your library"
+        });
+      }
+    })
   }
 
   render() {
@@ -31,18 +72,31 @@ class TagsPage extends Component {
       tags
     } = this.props;
 
-    const dataSource = songs.filter(song => {
+    const taggedSongs = songs.filter(song => {
       return song.tags.length > 0;
     });
+
+    const dataSource = getToggledSongs(taggedSongs, this.props.checkedTags, this.state.andOrToggle);
 
     return (
       <div id="tags-page">
         <Layout>
-          <Navbar />
+          <Navbar/>
           <Layout>
-            <Title>Tags</Title>
-            <TagsPanel editable />
-            <Divider />
+            <span>
+              <TagsPanel/>
+              <div>
+                <Checkbox onChange={e => this.flipToggle(e)}/>&nbsp;include all
+              </div>
+              <Button
+                className="generate-playlist-button"
+                type="primary"
+                disabled={this.props.checkedTags.length === 0}
+                onClick={() => this.createPlaylist()}>
+                Generate Playlist
+              </Button>
+            </span>
+            <Divider/>
             <Title>Tagged Songs</Title>
             <div id="song-list">
               <List
@@ -81,7 +135,8 @@ const mapStateToProps = state => {
   return {
     hasLoaded: state.songs.hasLoaded,
     songs: state.songs.songs,
-    tags: state.tags.tags
+    tags: state.tags.tags,
+    checkedTags: state.tagsPanel.checkedTags,
   };
 };
 

@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import Layout from 'antd/lib/layout';
-import Checkbox from 'antd/lib/checkbox';
 import Divider from 'antd/lib/divider';
 import Typography from 'antd/lib/typography';
-import Button from "antd/lib/button";
 import Icon from 'antd/lib/icon';
 import Input from "antd/lib/input";
 import Navbar from '../components/Navbar';
@@ -12,8 +10,6 @@ import SongList from '../components/SongList';
 import {connect} from "react-redux";
 import {getTagsFailure, getTagsRequest, getTagsSuccess} from "../actions";
 import notification from "antd/lib/notification";
-import Switch from "antd/lib/switch";
-import {getToggledSongs} from "../utils/helpers";
 
 const { Title } = Typography;
 
@@ -21,42 +17,16 @@ class HomePage extends Component{
 
   constructor(props) {
     super(props);
-    this.state = {andOrToggle: false, filterText: ""};
+    this.state = {filterText: ""};
   }
 
   componentDidMount() {
     this.props.getTags();
   }
 
-  flipToggle(e) {
-    this.setState({
-      andOrToggle: e.target.checked
-    })
-  }
-
   updateFilter(filter) {
     this.setState({
       filterText: filter
-    })
-  }
-
-
-  createPlaylist(){
-    let playlistName = this.props.checkedTags.join(", ");
-
-    //fetching the songs to add to playlist based on selected tags
-    let selected_songs = getToggledSongs(this.props.songs, this.props.checkedTags, this.state.andOrToggle);
-
-    Meteor.call("createPlaylist", playlistName, selected_songs, (err, response) => {
-      if (err) {
-        notification.error({
-          message: err.error
-        });
-      } else {
-        notification.success({
-          message: "Added playlist to your library"
-        });
-      }
     })
   }
 
@@ -68,16 +38,6 @@ class HomePage extends Component{
                     <Layout>
                         <span>
                           <TagsPanel />
-                          <div>
-                            <Checkbox onChange={e => this.flipToggle(e)} />&nbsp;include all
-                          </div>
-                          <Button
-                            className="generate-playlist-button"
-                            type="primary"
-                            disabled={this.props.checkedTags.length === 0}
-                            onClick={() => this.createPlaylist()}>
-                            Generate Playlist
-                          </Button>
                         </span>
                         <Divider />
                         <Title>Liked Songs</Title>
@@ -89,7 +49,7 @@ class HomePage extends Component{
                             this.updateFilter(event.target.value.toLowerCase());
                           }}
                         />
-                        <SongList andToggle={this.state.andOrToggle} filterText={this.state.filterText}/>
+                        <SongList filterText={this.state.filterText}/>
                     </Layout>
                 </Layout>
             </div>
@@ -100,7 +60,8 @@ class HomePage extends Component{
 const mapStateToProps = state => {
   return {
     checkedTags: state.tagsPanel.checkedTags,
-    songs: state.songs.songs
+    songs: state.songs.songs,
+    tags: state.tags.tags,
   };
 };
 

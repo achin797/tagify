@@ -77,10 +77,6 @@ Meteor.methods({
 
     const playlistId = response.data.body.id;
 
-    var filtered = selectedTracks.filter(function (el) {
-      return el != null;
-    });
-
     // Put songs into the playlist.
     var uris = selectedTracks.map(function (track) {
       return "spotify:track:" + track.id;
@@ -90,17 +86,18 @@ Meteor.methods({
       return el !== 'spotify:track:null';
     });
 
+    //to bypass the 100 song limit when adding songs to a playlist
     var offset = 0;
 
     do {
 
-      response = spotifyApi.addTracksToPlaylist(Meteor.user().services.spotify.id, playlistId, uris.slice(offset, offset + 50), {limit:50});
+      response = spotifyApi.addTracksToPlaylist(Meteor.user().services.spotify.id, playlistId, uris.slice(offset, offset + 100), {limit:50});
 
       if (checkTokenRefreshed(response, spotifyApi)) {
-        response = spotifyApi.addTracksToPlaylist(Meteor.user().services.spotify.id, playlistId, uris.slice(offset, offset + 50), {limit:50});
+        response = spotifyApi.addTracksToPlaylist(Meteor.user().services.spotify.id, playlistId, uris.slice(offset, offset + 100), {limit:50});
       }
 
-      offset += 50
+      offset += 100
 
     } while (offset < uris.length);
 

@@ -85,7 +85,7 @@ Meteor.methods({
             });
     }
 
-    let tracks = null;
+    var tracks = null;
     do {
       Meteor.call('getPlaylistTracks', playlistId, (err, response) => {
         if (err) {
@@ -96,14 +96,14 @@ Meteor.methods({
       })
     } while (tracks == null);
 
-    songIdList = tracks.filter(track => {if(track.track){return true}});
-    songIdList = songIdList.map(track => track.track.id);
+    cleanTracks = tracks.filter(track => {if(track.track){return true}});
+    songIdList = cleanTracks.map(track => track.track.id);
     tagExists = false;
     // add tag to every song in the playlist
     for(song in songIdList){
       Meteor.call('addSongTag', userId, tagId, songIdList[song]);
     }
-    return {playlistId: playlistId, tagId: tagId, tracks: tracks};
+    return {playlistId: playlistId, tagId: tagId, tracks: cleanTracks};
   },
 
   removePlaylistTag: (userId, tagId, playlistId) => {
@@ -141,13 +141,13 @@ Meteor.methods({
       })
     } while (tracks == null);
     
-    songIdList = tracks.filter(track => {if(track.track){return true}});
-    songIdList = songIdList.map(track => track.track.id);
+    cleanTracks = tracks.filter(track => {if(track.track){return true}});
+    songIdList = cleanTracks.map(track => track.track.id);
     // remove tag from every song in the playlist
     for(song in songIdList){
       Meteor.call('removeSongTag', userId, tagId, songIdList[song]);
     }
 
-    return {playlistId: playlistId, tagId: tagId, tracks: tracks};
+    return {playlistId: playlistId, tagId: tagId, tracks: cleanTracks};
   }
 });

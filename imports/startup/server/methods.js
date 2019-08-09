@@ -146,31 +146,56 @@ Meteor.methods({
 
 
     // load all songs that have been tagged before, but are not in the users "liked" songs
-    var userDbSongs = Meteor.users.findOne(userId).taggedSongs;
-    var currTracks = updatedTracks.map(track => {return track.id});
+    var userDb = Meteor.users.findOne(userId).taggedSongs;
+    if (userDb){
+      var userDbSongs = userDb.map(song => {if (song.id) {return song.id}});
+      var currTracks = updatedTracks.map(track => {return track.id});
 
-    for (song in userDbSongs){
-      if (!currTracks.includes(userDbSongs[song].id)){
-        var trackInfo = [];
-        do {
-          var response = spotifyApi.getTrack(userDbSongs[song].id);
-          if (checkTokenRefreshed(response, spotifyApi)) {
-            response = spotifyApi.getTrack(userDbSongs[song].id);
+      if (userDbSongs.length > 0){
+        missingTracks = [];
+        
+        // find missing songs that have been tagged
+        for (song in userDbSongs){
+          if (!currTracks.includes(userDbSongs[song])){
+            if(userDbSongs[song]){
+              missingTracks.push(userDbSongs[song]);
+            };
           }
-          trackInfo = trackInfo.concat(response.data.body);
-        } while (response.data.body.next != null);
-        var updated_track = {};
-        updated_track['title'] = trackInfo[0].name;
-        updated_track['id'] = trackInfo[0].id;
-        updated_track['artists'] = trackInfo[0].artists.map(artist => {return artist.name;});
-        updated_track['album'] = trackInfo[0].album.name;
-        updated_track['tags'] = userDbSongs[song].tags;
+        }
 
-        updatedTracks.push(updated_track);
+        // get metadata of all tracks in missingTracks
+        var trackInfo = [];
+        var offset = 0;
+        do {
+          var response = spotifyApi.getTracks(missingTracks.slice(offset, offset+50), {limit: 50});
+          if (checkTokenRefreshed(response, spotifyApi)) {
+            response = spotifyApi.getTracks(missingTracks.slice(offset, offset+50), {limit: 50});
+          }
+          offset += 50;
+          trackInfo = trackInfo.concat(response.data.body);
+        } while (offset <= missingTracks.length);
+
+        // add metadata of missing songs to the updatedTracks return value
+        if(trackInfo.length > 0){
+          songList = []
+          trackInfo = trackInfo.map(track => {return track.tracks});
+          for(trackSet in trackInfo){
+            songList = songList.concat(trackInfo[trackSet]);
+          } 
+          for (song in songList){
+            if (!currTracks.includes(songList[song].id)){
+              var updated_track = {};
+              updated_track['title'] = songList[song].name;
+              updated_track['id'] = songList[song].id;
+              updated_track['artists'] = songList[song].artists.map(artist => {return artist.name;});
+              updated_track['album'] = songList[song].album.name;
+              updated_track['tags'] = userDb[song].tags;
+              updatedTracks.push(updated_track);
+            }
+          }
+        }
       }
     }
-
-
     return updatedTracks;
   },
 

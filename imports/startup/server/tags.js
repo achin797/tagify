@@ -24,6 +24,9 @@ Meteor.methods({
     });
     Meteor.users.update(userId, {
       $pull: { taggedSongs: { tags: tagId}}
+    });
+    Meteor.users.update(userId, {
+      $pull: { taggedPlaylists: { tags: tagId}}
     })
   },
   addSongTag: (userId, tagId, songId) => {

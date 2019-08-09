@@ -242,21 +242,21 @@ Meteor.methods({
         return updatedPlaylists;
     },
 
-    getPlaylistTracks: playlistId => {
-        var spotifyApi = new SpotifyWebApi();
-        var offset = 0;
-        var tracks = [];
+  getPlaylistTracks: playlistId => {
+      var spotifyApi = new SpotifyWebApi();
+      var offset = 0;
+      var tracks = [];
 
-        do {
-            var response = spotifyApi.getPlaylistTracks(Meteor.user().services.spotify.id, playlistId, {offset: offset}); 
-            if (checkTokenRefreshed(response, spotifyApi)) {
-                response = spotifyApi.getPlaylistTracks(Meteor.user().services.spotify.id, playlistId, {offset: offset}); 
-            }
-            offset += response.data.body.limit;
-            tracks = tracks.concat(response.data.body.items);
-        } while(response.data.body.next!=null);
-        return tracks;
-    } 
+      do {
+          var response = spotifyApi.getPlaylistTracks(Meteor.user().services.spotify.id, playlistId, {offset: offset}); 
+          if (checkTokenRefreshed(response, spotifyApi)) {
+              response = spotifyApi.getPlaylistTracks(Meteor.user().services.spotify.id, playlistId, {offset: offset}); 
+          }
+          offset += response.data.body.limit;
+          tracks = tracks.concat(response.data.body.items);
+      } while(response.data.body.next!=null);
+      return tracks;
+  } 
 });
 
 var checkTokenRefreshed = function (response, api) {

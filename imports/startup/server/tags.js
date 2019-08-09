@@ -27,22 +27,26 @@ Meteor.methods({
     })
   },
   addSongTag: (userId, tagId, songId) => {
-    const songExists = Meteor.users.findOne({ "_id": userId, "taggedSongs.id": songId });
-    if (songExists){
-        // check to see if song is already tagged with the same tag
-        const tagExists = songExists.taggedSongs.filter(song => { if (song.id == songId){return true}});
-        if(!tagExists[0].tags.includes(tagId)){
-          Meteor.users.update({ "_id": userId, "taggedSongs.id": songId }, {
-              $push: { "taggedSongs.$.tags": tagId }
-          })
-        };
-    } else {
-        Meteor.users.update( userId , 
-          { $push: { taggedSongs: { id: songId, tags : [tagId] } }
-            });
+    if(songId){
+      const songExists = Meteor.users.findOne({ "_id": userId, "taggedSongs.id": songId });
+      if (songExists){
+          // check to see if song is already tagged with the same tag
+          const tagExists = songExists.taggedSongs.filter(song => { if (song.id == songId){return true}});
+          if(!tagExists[0].tags.includes(tagId)){
+            Meteor.users.update({ "_id": userId, "taggedSongs.id": songId }, {
+                $push: { "taggedSongs.$.tags": tagId }
+            })
+          };
+      } else {
+        if(songId){
+          Meteor.users.update( userId , 
+            { $push: { taggedSongs: { id: songId, tags : [tagId] } }
+              });
+          }
         }
-      return {songId: songId, tagId: tagId};
-    },
+        return {songId: songId, tagId: tagId};
+    }
+  },
 
   removeSongTag: (userId, tagId, songId) => {
     const songExists = Meteor.users.findOne({ "_id": userId, "taggedSongs.id": songId });
@@ -92,7 +96,8 @@ Meteor.methods({
       })
     } while (tracks == null);
 
-    songIdList = tracks.map(track => track.track.id);
+    songIdList = tracks.filter(track => {if(track.track){return true}});
+    songIdList = songIdList.map(track => track.track.id);
     tagExists = false;
     // add tag to every song in the playlist
     for(song in songIdList){
@@ -136,7 +141,8 @@ Meteor.methods({
       })
     } while (tracks == null);
     
-    songIdList = tracks.map(track => track.track.id);
+    songIdList = tracks.filter(track => {if(track.track){return true}});
+    songIdList = songIdList.map(track => track.track.id);
     // remove tag from every song in the playlist
     for(song in songIdList){
       Meteor.call('removeSongTag', userId, tagId, songIdList[song]);

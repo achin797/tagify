@@ -121,8 +121,9 @@ Meteor.methods({
       tracks = tracks.concat(response.data.body.items);
 
     } while (response.data.body.next != null);
-
-    var updatedTracks = tracks.map(track => {
+    
+    var cleanTracks = tracks.filter(track => {if (track.track.id){return true}});
+    var updatedTracks = cleanTracks.map(track => {
       var updated_track = {};
       updated_track['title'] = track.track.name;
       updated_track['id'] = track.track.id;
@@ -172,7 +173,9 @@ Meteor.methods({
             response = spotifyApi.getTracks(missingTracks.slice(offset, offset+50), {limit: 50});
           }
           offset += 50;
-          trackInfo = trackInfo.concat(response.data.body);
+          if (response.data){
+            trackInfo = trackInfo.concat(response.data.body);
+          }
         } while (offset <= missingTracks.length);
 
         // add metadata of missing songs to the updatedTracks return value

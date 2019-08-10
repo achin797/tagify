@@ -172,7 +172,9 @@ Meteor.methods({
             response = spotifyApi.getTracks(missingTracks.slice(offset, offset+50), {limit: 50});
           }
           offset += 50;
-          trackInfo = trackInfo.concat(response.data.body);
+          if (response.data){
+            trackInfo = trackInfo.concat(response.data.body);
+          }
         } while (offset <= missingTracks.length);
 
         // add metadata of missing songs to the updatedTracks return value

@@ -23,7 +23,7 @@ class SongList extends Component{
   }
 
   render(){
-    const dataSource = getToggledSongs(this.props.songs, this.props.checkedTags, this.props.andToggle, this.props.filterText);
+    const dataSource = getToggledSongs(this.props.songs, [], this.props.andToggle, this.props.filterText);
 
     return (
       <div id="song-list">

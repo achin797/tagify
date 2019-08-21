@@ -1,6 +1,20 @@
 # Tagify
 Group: Austin Kvaale n0a2b, Mingyu Gao f5k0b, Achintya Chandwani g9i0b
 
+## Basic Contribution Requirements
+- Achin: Led the creation and managed the REST API endpoints on the server to make and process requests to Spotify’s API
+- Austin: Led most of the backend development
+- Ming: Led the UI design development and set up the project for all of us to build on
+
+## Basic Functionality Requirements
+Tagify is intended to solve the problem of tagging and managing a Spotify user's music library. Our goal was to implement a tagging system that allows us to create playlists from them.
+
+## Challenges, Learning and Future Directions
+A challenge we faced was working with the Spotify web API. Specifically, API endpoints provided to fetch data were very limited by the amount of data we could retrieve (e.g. data for 50 songs per request). Additionally, making too many requests in a short time would yield a timeout. We became more aware of the cost of making requests and the importance of caching. The solution we implemented makes requests repeatedly until all data is loaded, then respond to the front end. We would display a loading screen for the user. Further progress could be made by instead loading the data in chunks and respond to the front end after each chunk, for a more responsive user experience.
+
+## Initiative and Additional Contributions
+An additional contribution we made was the inclusion of a UI library. We wanted to achieve a consistent way of styling that would seem familiar to a Spotify user.
+
 ### Who is it for?
 Tagify is for Spotify users who find that playlists are too messy and take too many clicks.
 
